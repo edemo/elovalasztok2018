@@ -7,7 +7,15 @@ A projekt jelenleg nem többnyelvű, a magyar szövegkonstansok fixen be vannak 
 
 Telepités:
 1. Normál Joomla 3 telepités
-2. JUMI kiegészités telepitése a jooma extension könyvtárból
-3. A jelen repoban szerepló alkönyvtárak és fájlok feltöltése joomla_root/elovalasztok könyvtárba
-4. Joomla JUMI modulok és JUMI komponens hivások kialakitása a joomla admin felületen.
+2. JUMI, bfstop, eprivacy, jcomments, jce, jhackguards, akaebabackup kiegészitések telepitése a jooma extension könyvtárból, ezek konfigurálása
+3. com_adalogin kiegészitő telepitése (github repoból) és konfigurálása
+4. A jelen repoban szerepló alkönyvtárak és fájlok feltöltése joomla_root/elovalasztok könyvtárba
+5. Joomla JUMI modulok és JUMI komponens hivások kialakitása a joomla admin felületen.
+- cimkefelho JUMI modul
+- gombok JUMI modul
+- oevklist JUMI component
+- szavazok JUMI component
+6.dizájn kialakitása - joomla template, css, images stb
+
+
 

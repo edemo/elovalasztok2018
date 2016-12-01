@@ -50,6 +50,12 @@
 	$result = false;
 	$msg = '';
 	$fordulo = $config->fordulo;
+
+	if ($user->id <= 0) {
+	   $msg = 'Jelentkezzen be!';
+	   return false;
+	}	
+
 	if ($akcio == 'jeloltAdd') {		
 	   if ($config->jeloltAdd) {
 		   if (($user->groups[8] == 8) | ($user->groups[10] == 10)) {

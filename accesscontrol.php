@@ -6,7 +6,6 @@
   * Szerző: Fogler Tibor   tibor.fogler@gmail.com_addref
   * web: github.com/utopszkij/elovalasztok2018
   * Verzió: V1.00  2016.09.14.
-  *
   */
   global $config;
   $db = Jfactory::getDBO();

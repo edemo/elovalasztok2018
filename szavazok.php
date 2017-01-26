@@ -9,9 +9,11 @@
   *
   * JRequest: oevk, task
   */
-  global $config;
-  include JPATH_ROOT.'/elovalasztok/accesscontrol.php';
-  include JPATH_ROOT.'/elovalasztok/models/szavazok.php';
+  global $evConfig;
+  include_once dirname(__FILE__).'/accesscontrol.php';
+  include_once dirname(__FILE__).'/models/szavazok.php';
+  include_once dirname(__FILE__).'/funkciok.php';
+  include_once dirname(__FILE__).'/config.php';
   
   $user = JFactory::getUser();
   $msg = '';
@@ -19,7 +21,12 @@
   $oevk = $input->get('oevk');
   $filter = $input->get('filter','','STRING');
   $task = $input->get('task');
+  $secret = $input->get('secret');
+  $id = $input->get('id',0);
   
+  if ($oevk == 0) {
+	  $oevk = $id;
+  }
   
   function base64url_encode2($data) { 
 	  return rtrim(strtr(base64_encode($data), '+/', '-_'), '='); 
@@ -28,8 +35,15 @@
   
   // ================ controller ==============================
   class szavazoController {
+	  
+	/**
+    * szavazó képernyő megjelenitése  - új szavazat beküldése
+	* @param integer szavazás azonosító
+    * @param JUser user 
+    * @param string filter
+    */ 	
     public function szavazok($oevk, $user, $filter) {
-		global $config;
+		global $evConfig;
 		$msg = '';
 		if ($oevk <= 0) {
 			echo '<div class="warning">Válassza ki az Egyéni országygyülési választó kerületet!</div>';
@@ -45,6 +59,7 @@
 			    echo '<div class="warning">Nincs egyetlen jelölt sem.</div>';
 			  } else {
 		       include JPATH_ROOT.'/elovalasztok/views/szavazoform.php'; 
+			   $this->mysqlUserToken($user);
 			  }  
 		    } else {
 			  echo '<div class="error">Jelenleg nem szavazhat</div>';
@@ -61,8 +76,14 @@
 		}
 	}
 	
+	/**
+    * szavazó képernyő megjelenitése - szavazat modosítás
+	* @param integer szavazás azonosító
+    * @param JUser user 
+    * @param string filter
+    */ 	
     public function szavazatEdit($oevk, $user, $filter) {
-		global $config;
+		global $evConfig;
 		$msg = '';
 		if ($oevk <= 0) {
 			echo '<div class="warning">Válassza ki az Egyéni országygyülési választó kerületet!</div>';
@@ -78,6 +99,7 @@
 			    echo '<div class="warning">Nincs egyetlen jelölt sem.</div>';
 			  } else {
 		       include JPATH_ROOT.'/elovalasztok/views/szavazoform.php'; 
+			   $this->mysqlUserToken($user);
 			  }  
 		    } else {
 			  echo '<div class="error">Jelenleg nem módosíthatja szavazatát</div>';
@@ -92,9 +114,54 @@
 			';
 		}
 	}
+	
+	/**
+    * szavazat törlés megerösítő képernyő
+	* @param integer szavazás azonosító
+    * @param JUser user 
+    * @param string filter
+    */ 	
+	public function szavazatDelete($oevk, $user, $filter) {
+		$okURL = JURI::base().'index.php';
+		$cancelURL = JURI::base().'index.php?option=com_content&view=category&layout=articles&id='.$oevk;
+		$db = JFactory::getDBO();
+		$db->setQuery('select title from #__content where id='.$db->quote($oevk));
+		$res = $db->loadObject();
+		echo '<div class="szavaztDelete">
+		';
+		if ($res) {
+			echo '<h2>'.$res->title.'</h2>
+			';
+		}
+		echo '<center>
+		<h2>Szavazatom törlése</h2>
+		<form action="'.$okURL.'" method="post">
+			'.JHtml::_('form.token').'		
+		   <input type="hidden" name="option" value="com_jumi" />
+		   <input type="hidden" name="fileid" value="4" />
+		   <input type="hidden" name="task" value="szavazatDelete2" />
+		   <input type="hidden" name="id" value="'.$oevk.'" />
+		   <p>Biztonsági kód:<input type="text" name="secret" value="'.$_COOKIE['voks_'.$oevk].'" /></p>
+		   <p><button type="submit" class="btn-delete">Rendben, törölni akarom</button>&nbsp;
+		      <button class="btn-cancel" type="button" onclick="location='."'$cancelURL'".'">Mégsem</button>
+		   </p>
+		</form>
+		</center>
+		</div>
+		';
+	}
 
-    public function szavazatDelete($oevk, $user, $filter) {
-		global $config;
+	/**
+    * szavazat törtlés végrehajtása
+	* @param integer szavazás azonosító
+    * @param JUser user 
+    * @param string filter
+    */ 	
+    public function szavazatDelete2($oevk, $user, $filter) {
+		global $evConfig;
+		Jsession::checkToken() or die('invalid CSRF protect token');
+		$input = JFactory::getApplication()->input;  
+		$secret = $input->get('secret');
 		$msg = '';
 		if ($oevk <= 0) {
 			echo '<div class="warning">Válassza ki az Egyéni országygyülési választó kerületet!</div>';
@@ -105,11 +172,14 @@
 		   } else {
 		    if (teheti($oevk, $user, 'szavazatDelete', $msg)) {
 		      $model = new szavazokModel();
-			  if ($model->szavazatDelete($oevk, $user, $config->fordulo)) {
+			  if ($model->szavazatDelete($oevk, $user, $evConfig->fordulo, $secret)) {
 				  $msg = 'szavazata törölve lett.';
 				  $msgClass = 'info';
+				  $cookie_name = 'voks_'.$oevk;
+				  $cookie_value = '';
+				  setcookie($cookie_name, $cookie_value, time() + (86400 * 30), "/"); // 86400 = 1 day					
 			  } else {
-				  $msg = $model->getErrorMsg();
+				  $msg = 'Hiba a szavazat törlés közben, a szavazat nem lett törölve (lehet, hogy hibás biztonsági kulcsot adott meg)';
 				  $msgClass = 'error';
 			  }
 		      JControllerLegacy::setMessage($msg,$msgClass);
@@ -129,9 +199,16 @@
 		}
 	}
 
+	/**
+    * szavazás eredményének megjelenitése
+	* @param integer szavazás azonosító
+    * @param JUser user 
+    * @param string filter
+    */ 	
     public function eredmeny($oevk, $user, $filter) {
-		global $config;
+		global $evConfig;
 		$db = JFactory::getDBO();
+		$this->mysqlUserToken($user);
 		$model = new szavazokModel();
 		if ($oevk <= 0) {
 			echo '<div class="warning">Válassza ki az Egyéni országygyülési választó kerületet!</div>';
@@ -151,7 +228,7 @@
 			               #__eredmeny 
 						   where pollid='.$db->quote($pollid).' and 
 			                     filter='.$db->quote($filter).' and
-								 fordulo = '.$db->quote($config->fordulo) );
+								 fordulo = '.$db->quote($evConfig->fordulo) );
 			$cache = $db->loadObject();
 			
 			// ha nincs meg a cache rekord akkor hozzuk most létre, üres tartalommal
@@ -159,12 +236,12 @@
 			  $db->setQuery('INSERT INTO #__eredmeny
 			  (pollid, report,filter,fordulo ) 
 			  value 
-			  ('.$db->quote($pollid).',"","'.$filter.'",'.$db->quote($config->fordulo).')');
+			  ('.$db->quote($pollid).',"","'.$filter.'",'.$db->quote($evConfig->fordulo).')');
 			  $db->query();
 			  $cache = new stdClass();
 			  $cache->pollid = $pollid;
 			  $cache->filter = $filter;
-			  $cache->fordulo = $config->fordulo;
+			  $cache->fordulo = $evConfig->fordulo;
 			  $cache->report = "";
 			}
 			
@@ -172,7 +249,7 @@
 			
 			if ($cache->report == "") {
 			  // ha nincs; most  kell condorcet/Shulze feldolgozás feldolgozás
-			  $schulze = new Condorcet($db,$organization,$pollid,$filter,$config->fordulo);
+			  $schulze = new Condorcet($db,$organization,$pollid,$filter,$evConfig->fordulo);
 			  $report = $schulze->report();
 			  $db->setQuery('update #__eredmeny 
 			  set report='.$db->quote($report).',
@@ -187,7 +264,7 @@
 			      c9 = '.$schulze->c9.',
 			      c10 = '.$schulze->c10.',
 				  vote_count = '.$schulze->vote_count.'
-			  where pollid="'.$pollid.'" and filter='.$db->quote($filter).' and fordulo='.$db->quote($config->fordulo));
+			  where pollid="'.$pollid.'" and filter='.$db->quote($filter).' and fordulo='.$db->quote($evConfig->fordulo));
 			  $db->query();
 			} else {  
 			  // ha van akkor a cahcelt reportot jelenitjuük meg
@@ -203,7 +280,7 @@
 	  * JRequest: token, oevk, szavazat jelölt_id=pozicio, ......
 	  */
 	public function szavazatSave($oevk, $user, $filter) {
-		global $config;
+		global $evConfig;
 		Jsession::checkToken() or die('invalid CSRF protect token');
 		if ($user->id <= 0) die('nincs bejelentkezve, vagy lejárt a session');
 		$input = JFactory::getApplication()->input;  
@@ -211,17 +288,26 @@
 		$msg = '';
 		$msgClass = '';
 		if ($oevk > 0) {
-			if (szavazottMar($oevk, $user, $config->fordulo))
+			if (szavazottMar($oevk, $user, $evConfig->fordulo))
 				$akcio = 'szavazatEdit';
 			else
 				$akcio = 'szavazas'; 
 			if (teheti($oevk, $user, $akcio, $msg)) {
 				$model = new szavazokModel();
-				if ($model->save($oevk, $szavazat, $user, $config->fordulo)) {
-					$msg = 'Köszönjük szavazatát.';
+				$secret = rand(100000,999999);
+				$this->mysqlUserToken($user);
+				if ($model->save($oevk, $szavazat, $user, $evConfig->fordulo, $secret)) {
+					$_COOCIE['voks_'.$oevk] = $secret;
+					$msg = 'Köszönjük szavazatát. Szavazatát a rendszer tárolta.<br /><br />'.
+					       'Szavazat biztonsági kód:<strong>'.$secret.'</strong><br /><br />'.
+						   'Amennyiben böngészője tárolja a "cooki"-kat (sütiket); akkor 30 napon belül, ebből a böngészöből kezdeményezheti szavazata törlését<br />'.
+                           'Ellenkező esetben, 30 nap után, illetve másik böngészőből a szavazat törléséhez a fenti biztonsági kód megadása szükséges.<br />';
 				    $msgClass = 'info';
+					$cookie_name = 'voks_'.$oevk;
+					$cookie_value = $secret;
+					setcookie($cookie_name, $cookie_value, time() + (86400 * 30), "/"); // 86400 = 1 day					
 				} else {
-					$msg = $model->getErrorMsg();
+					$msg = 'Hiba a szavazat tárolása közben. A szavazat nem lett tárolva';
 					$msgClass = 'error';
 				}	
 			} else {
@@ -230,13 +316,33 @@
 		} else {
 			$msg = 'Nincs kiválasztva az OEVK';
 			$msgClass = 'error';
-			
 		}
-		
 		if ($msg != '')
 		   JControllerLegacy::setMessage($msg,$msgClass);
         JControllerLegacy::setRedirect('index.php?option=com_content&view=category&layout=articles&id='.$oevk);
-		JControllerLegacy::redirect();
+		JControllerLegacy::redirect($msg, $msgClass);
+	}
+	
+	/**
+	* user aktivitás jelző token tárolása az adatbázisba és az elavultak (1 óránál régebbiek) törlése
+	*/
+	protected function mysqlUserToken($user) {
+		$db = JFactory::getDBO();
+		$db->setQuery('CREATE TABLE IF NOT EXISTS #__usertoken (
+		   user_id varchar(128),
+		   idopont datetime,
+		   PRIMARY KEY (`user_id`)
+		)');
+		$db->query();
+		$db->setQuery('delete from #__usertoken where idopont < "'.date('Y-m-d H:i:s', time() - 60*60).'"');
+		$db->query();
+		$db->setQuery('select * from #__usertoken where user_id='.$db->quote(sha1($user->id)));
+		$res = $db->loadObject();
+		if ($res)
+			$db->setQuery('update #__usertoken set idopont="'.date('Y-m-d H:i:s').'" where user_id='.$db->quote(sha1($user->id)));
+		else
+			$db->setQuery('insert into #__usertoken values ('.$db->quote(sha1($user->id)).',"'.date('Y-m-d H:i:s').'")');
+		$db->query();	
 	}
   }
   

@@ -1,0 +1,7 @@
+build_image: magwas/wp_oauth_plugin
+language: python
+python:
+  - 2.7
+build:
+  ci:
+    - tools/script

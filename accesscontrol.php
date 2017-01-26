@@ -1,35 +1,44 @@
 <?php
 /**
-  * elovalasztok acces control  és szavazott már? funkciók         include file
+  * elovalasztok acces control  és további globális funkciók         include file
   *
   * Licensz: GNU/GPL
   * Szerző: Fogler Tibor   tibor.fogler@gmail.com_addref
   * web: github.com/utopszkij/elovalasztok2018
   * Verzió: V1.00  2016.09.14.
   */
-  global $config;
-  $db = Jfactory::getDBO();
-  $db->setQuery('select * from #__jumi where id=1');
-  $res = $db->loadObject();
-  $s = $res->custom_script;
-  $config = JSON_decode($s);
-  if (!isset($config->fordulo)) $config->fordulo = 0;
-  if ($config->fordulo == '') $config->fordulo = 0;
+  include_once dirname(__FILE__).'/funkciok.php';
+  include_once dirname(__FILE__).'/config.php';
+  
+  global $evConfig;
+  if (!isset($evConfig->fordulo)) $evConfig->fordulo = 0;
+  if ($evConfig->fordulo == '') $evConfig->fordulo = 0;
   
   
   /**
     * adott user, már szavazott?
 	* ha nincs bejelentkezve akkor false az eredménye
-	* @param integer $oevk (jelenleg csak formai okokból, valójában nincs használva)
+	* @param integer $szavazas_id 
 	* @param JUser $user
 	* @param integer $fordulo
   */	
-  function szavazottMar($oevk, $user, $fordulo = 0) {
+  function szavazottMar($szavazas_id, $user, $fordulo = 0) {
+	  global $evConfig;
+	  $db = JFactory::getDBO();
+	  $result = false;
 	  if ($user->id > 0) {
-	    $db = JFactory::getDBO();
-	    $db->setQuery('select * from #__szavazatok where user_id='.$db->quote($user->id).' and fordulo = '.$db->quote($fordulo));
-	    $res = $db->loadObjectList();
-	    $result = (count($res) >= 1);
+		if (isOEVKszavazas($szavazas_id)) {  
+	      $db->setQuery('select * from #__szavazatok 
+		  where user_id='.$db->quote($user->id).' and fordulo = '.$db->quote($fordulo).'
+		  and szavazas_id in ('.implode(',', $evConfig->oevkSzavazasok).')');
+	      $res = $db->loadObjectList();
+	      $result = (count($res) >= 1);
+		}
+		if (isBelsoSzavazas($szavazas_id)) {  
+	      $db->setQuery('select * from #__szavazatok where user_id='.$db->quote($user->id).' and szavazas_id = '.$db->quote($szavazas_id));
+	      $res = $db->loadObjectList();
+	      $result = (count($res) >= 1);
+		}
 	  } else {
 		$result = false;  
 	  }	
@@ -44,14 +53,20 @@
 	* @param string $msg output parameter: tiltás oka pl: 'config'
 	* @return boolean
   */
-  function teheti($oevk, $user, $akcio, &$msg) {
-	global $config;
+  function teheti($szavazas_id, $user, $akcio, &$msg) {
+	global $evConfig;
 	$result = false;
 	$msg = '';
 	$fordulo = $config->fordulo;
+
+	if ($user->id <= 0) {
+	   $msg = 'Jelentkezzen be!';
+	   return false;
+	}	
+
 	if ($akcio == 'jeloltAdd') {		
-	   if ($config->jeloltAdd) {
-		   if (($user->groups[8] == 8) | ($user->groups[10] == 10)) {
+	   if ($evConfig->jeloltAdd) {
+		   if ($evConfig->userAdmin($user)) {	   
 			   $result = true;
 			   $msg = '';
 		   } else {
@@ -62,13 +77,15 @@
 				   $msg = 'Nincs ehhez joga!';
 			   }
 		   }
-	   } else {
+	   } else if ((isBelsoSzavazas($szavazas_id)) & (isMozgalomTag($user))) {
+		   $result = true; 
+	   } else {	   
 		   $result = false;
 		   $msg='config';
 	   }
 	} else if ($akcio == 'jeloltEdit') {
-	   if ($config->jeloltEdit) {
-		   if (($user->groups[8] == 8) | ($user->groups[10] == 10)) {
+	   if ($evConfig->jeloltEdit) {
+		   if ($evConfig->userAdmin($user)) {	   
 			   $result = true;
 			   $msg = '';
 		   } else {
@@ -84,8 +101,8 @@
 		   $msg='config';
 	   }
 	} else if ($akcio == 'jeloltDelete')  {
-	   if ($config->jeloltDelete) {
-		   if (($user->groups[8] == 8) | ($user->groups[10] == 10)) {
+	   if ($evConfig->jeloltDelete) {
+		   if ($evConfig->userAdmin($user)) {	   
 			   $result = true;
 			   $msg = '';
 		   } else {
@@ -101,21 +118,26 @@
 		   $msg='config';
 	   }
 	} else if ($akcio == 'szavazas') {
-	   if ($config->szavazas) {
-		  if (szavazottMar($oevk, $user, $fordulo)) {
+	   if ($evConfig->szavazas) {
+		  if (szavazottMar($szavazas_id, $user, $fordulo)) {
 			  $result = false;
 			  $msg = 'Ön már szavazott';
 		  }  else {
-			  $result = true;
-			  $msg = '';
+			  if (szavazasraJogosult($user, $szavazas_id, '')) {
+			    $result = true;
+			    $msg = '';
+			  } else {
+			    $result = false;
+			    $msg = 'Ön ebben a szavazásban nem szavazhat';
+			  }	
 		  } 
 	   } else {
 		   $result = false;
 		   $msg='config';
 	   }
 	} else if ($akcio == 'szavazatEdit') {
-	   if ($config->szavazatEdit) {
-		  if (szavazottMar($oevk, $use, $fordulo)) {
+	   if ($evConfig->szavazatEdit) {
+		  if (szavazottMar($szavazas_id, $use, $fordulo)) {
 			  $result = true;
 			  $msg = '';
 		  }  else {
@@ -127,8 +149,8 @@
 		   $msg='config';
 	   }
 	} else if ($akcio == 'szavazatDelete') {
-	   if ($config->szavazatDelete) {
-		  if (szavazottMar($oevk, $user, $fordulo)) {
+	   if ($evConfig->szavazatDelete) {
+		  if (szavazottMar($szavazas_id, $user, $fordulo)) {
 			  $result = true;
 			  $msg = '';
 		  }  else {
@@ -140,7 +162,7 @@
 		   $msg='config';
 	   }
 	} else if ($akcio == 'eredmeny') {
-	   if ($config->eredmeny) {
+	   if ($evConfig->eredmeny) {
 		   $result = true;
 		   $msg = '';	
 	   } else {

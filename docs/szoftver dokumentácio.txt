@@ -1,0 +1,118 @@
+
+JUMI taskok
+===========
+
+3. config include file
+
+           szavazni lehet? I/N
+           szavazatot modosítani lehet? I/N
+		   szavazatot törölni lehet? I/N
+           új jelölt felvitel  'csak admin', 'senki', 'regisztráltak'
+		   jelölt módosítás    'csak admin', 'admin és aki felvitte', 'senki'
+		   jelölt törlés       'csak admin', 'admin és aki felvitte', 'senki'
+		   
+  a bejelentkezési állapottól és attól függõen van-e oevk kiválasztva
+  ha nincs bejelentkezve:
+    regiszt, login, oevk lista aktiv
+	uj jelölt inaktiv
+	logout, szavazok, szavazatom törlése, szavazatom módosítása, jelölt adat modosítás, jelölt törlés inaktiv
+	ha oevk ki van választva  
+	  eredmény aktiv (és config függõ)
+	ha nincs 
+	   eredmény, újjelölt inaktiv  
+  ha be van jelentkezve
+    regiszt, login inaktiv
+	logout, oevk lista,  aktiv
+	ha oevk ki van választva
+	  eredmény, új jelölt (és config függõ) aktiv
+	  ha még nem szavazott szavazok  aktiv, egyébként inaktiv (és config függõ)
+	  szavazattom törlése, szavazatom módosítása hasonlóa attól függ szavazott-e? (és config függõ)
+	  jelölt adat módosítás jelölt törlés akkor aktiv ha õ van bejelentkezve (és config függõ)
+	ha oevk nincs kiválasztva
+	  szavazok, szavazatom törlése, szavazatom módosítása, új jelölt, jelölt adat módosítás, jelölt_törlés, eredmény inaktiv
+		
+  van benne egy "jogos(objekt, akcio, oevk)" function amit másik task is használni tud.
+     objekt: jelolt | szavazat
+	 akcio : add | edit | delete
+	 ovk Integer
+	 használja a LOGGED_USERE -t is
+
+	
+  
+4. oevklist component
+  INPUT: limit, limitstart, search SESSION limit, limitstart, search
+  OEVK lista megjelenitése a jelöltek számának kiirásával
+    limit, limitstart, search sessionba tárolva
+5. jeloltek component
+  task=list -- INPUT:oevk 
+     adott OEVK jelöltek listája  
+	 "back gomb"  goto oevklist
+	 "szavazok" gomb goto szavazo.form
+  task=add  -- INPUT:oevk LOGGED_ USER  
+     ha nincs bejelentkezve átirányit a bejelentkezéshez
+	 config és egyebek alapján jogosultság ellenörzés (lásd fomenu)
+     újjelõlt felvivõ ürlap megjelenitése
+  task=save -- INPUT:oevk, form mezõk, token  LOGGED_ USER 
+	 config és egyebek alapján jogosultság ellenörzés (lásd fomenu)
+     jelõlt ûrlap tárolása (azt is tárolni ki vitte fel!)
+	 goto jeloltek
+  task=edit -- INPUT:oevk, form mezõk, token   LOGGED_ USER 
+     ha nincs bejelentkezve akkor átirányit a bejelentkezéshez
+	 config és egyebek alapján jogosultság ellenörzés (lásd fomenu)
+     jelõlt módosító ürlap megjelenitése
+  task=delete -- INPUT:oevk, jelolt_id, token  LOGGED_ USER  
+     ha nincs bejelentkezve akkor átirányit a bejelentkezéshez
+	 config és egyebek alapján jogosultság ellenörzés (lásd fomenu)
+     jelõlt törlése
+	 goto jeloltek
+5. szavazo component
+  task=form  -- INPUT:oevk  LOGGED_ USER 
+    ha ha nincs bejelentkezve akkor átirányit a bejelentkezéshez
+	ha már szavazott akkor hibajelzés és goto jeloltek
+	config és egyebek alapján jogosultság ellenörzés (lásd fomenu)
+    szavazó ürlap megjelenitése
+  task=save  -- INPUT:oevk, form mezõk, token LOGGED_ USER 
+	config és egyebek alapján jogosultság ellenörzés (lásd fomenu)
+    szavazás tárolása  
+	goto jeloltek
+  task=delete -- INPUT:oevk LOGGED_ USER 
+    ha nincs bejelentkezve akkor átirányit a bejelentkezéshez
+    ha még nem szavazott hibajelzés és goto jeloltek
+	config és egyebek alapján jogosultság ellenörzés (lásd fomenu)
+    szavazat törlése  
+	goto jeloltek
+  task=edit  -- INPUT:oevk  LOGGED_ USER 
+    ha nincs bejelentkezve akkor átirányit a bejelentkezéshez
+    ha még nem szavazott hibajelzés és goto jeloltek
+	csak sajátját törölheti.
+    szavazat modosítás ürlap  
+  task=eredmeny
+    szavazás eredmény megjelenítése
+	"back gomb" goto jeloltek
+	"szavazok" goto szavazo.form 
+	"back2 gomb" goto oevklist
+	
+6. gombok modul
+  a configban lévõ jogok fv-t használva  az INPUT: option, fileid, task, oevk, LOGGED_USER alapján
+  jeleniti meg a fõmenü gombjat
+  
+  Login, regiszt, logout
+  Szavazok, Szavazatom törlése, Szavazatom modosítása, Eredmény, 
+  Új jelölt, Jelölt törlése, Jelölt módosítása
+
+  statikus menüpontok (mindig aktivak)
+  
+  Melyik oevk -ba tartozok?
+     http://valasztas.hu/hu/ogyv2014/770/770_0_index.html
+
+  oevk lista
+  Adatkezelési leírás
+  Adatvédelmi nyilatkozat
+  ADA leírás
+  Impresszum
+  
+http://index.hu/belfold/2014/valasztas/eredmenyek/
+
+
+  
+  

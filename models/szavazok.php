@@ -9,6 +9,10 @@
   *
   * JRequest: oevk, task
   */
+
+include_once JPATH_SITE.'/elovalasztok/accescontrol.php';  
+include_once JPATH_SITE.'/elovalasztok/funkciok.php';  
+  
 class szavazokModel {
 	private $errorMsg = '';
 	function __construct() {
@@ -26,6 +30,7 @@ class szavazokModel {
 		  `ada1` tinyint NOT NULL DEFAULT 0 COMMENT "ADA szem.adatokat megadta",
 		  `ada2` tinyint NOT NULL DEFAULT 0 COMMENT "ADA email ellenörzött",
 		  `ada3` tinyint NOT NULL DEFAULT 0 COMMENT "ADA hiteles",
+		  `secret` varchar(1024) NOT NULL DEFAULT "" COMMENT "biztonsági kulcs",
 		  PRIMARY KEY (`id`),
 		  KEY `temakori` (`temakor_id`),
 		  KEY `szavazasi` (`szavazas_id`),
@@ -61,25 +66,26 @@ class szavazokModel {
 	  * @param integer oevk_id
 	  * @return {"oevkId":szám, "oevkNev":string, "alternativak":[{"id":szám,"nev":string},....]}
 	*/  
-	public function getItem($oevk) {
+	public function getItem($szavazas_id) {
 		$db = JFactory::getDBO();
 		$result = new stdClass();
-		$result->oevkId = $oevk;
+		$result->oevkId = $szavazas_id;
 		$result->oevkNev = '';
 		$result->alternativak = array();
-		$db->setQuery('select * from #__categories where id='.$db->quote($oevk));
+		$db->setQuery('select * from #__categories where id='.$db->quote($szavazas_id));
 		$res = $db->loadObject(); 
 		if ($res) {
 			$result->oevkNev = $res->title;
-			$db->setQuery('select *
+			$db->setQuery('select rnd(10) as rnd, *
 			from #__content
-			where catid = '.$db->quote($oevk).'
-			order by title');
+			where catid = '.$db->quote($szavazas_id).' 
+			order by 1');
 			$res = $db->loadObjectList();
 			foreach ($res as $res1) {
 				$w = new stdClass();
 				$w->id = $res1->id;
 				$w->nev = $res1->title;
+				$w->introtext = $res1->introtext;
 				$result->alternativak[] = $w;
 			}
 		}
@@ -113,24 +119,33 @@ class szavazokModel {
 	  * @param string jelolt_id=pozicio,....
 	  * @param JUser
 	  * @param integer fordulo
+	  * @param integer secret
 	  * @return boolean
 	*/  
-	public function save($oevk, $szavazat, $user, $fordulo) {
+	public function save($szavazas_id, $szavazat, $user, $fordulo, $secret) {
 		$result = true;
-		
-		// elõõ törlés
+		$msg = '';
+		if (teheti($szavazas_id, $user, 'szavazas', $msg) == false) {
+			  $this->errorMsg .= $msg;
+			  $result = false;
+		}
 		$db = JFactory::getDBO();
-		$db->setQuery('delete from #__szavazatok where user_id='.$db->quote($user->id).' and fordulo='.$db->quote($fordulo));
+		$db->setQuery('START TRANSACTION');
+		$db->queery();
+		
+		// elõ törlés
+		$db->setQuery('delete from #__szavazatok 
+		where user_id='.$db->quote($user->id).' and fordulo='.$db->quote($fordulo).' and szavazas_id = '.$db->quote($szavazas_id));
 		$db->query();
 		// ada hitelesitési szint
 		$ada0 = 0;
 		$ada1 = 0;
 		$ada2 = 0;
 		$ada3 = 0;
-		if (substr($user->activation,0,1)=='[') $ada0 = 1;   // ADA
-		if (strpos($user->activation,'hash') > 0) $ada1 = 1; // ADA személyes adatok alapján
-		if (strpos($user->activation,'email') > 0) $ada2 = 1; // ADA email aktiválás
-		if (strpos($user->activation,'magyar') > 0) $ada3 = 1; // ADA személyesen ellenörzött
+		if (substr($user->params,0,1)=='[') $ada0 = 1;   // ADA
+		if (strpos($user->params,'hash') > 0) $ada1 = 1; // ADA személyes adatok alapján
+		if (strpos($user->params,'email') > 0) $ada2 = 1; // ADA email aktiválás
+		if (strpos($user->params,'magyar') > 0) $ada3 = 1; // ADA személyesen ellenörzött
 		// string részekre bontása és tárolás ciklusban
 		$w1 = explode(',',$szavazat);
 		foreach ($w1 as $item) {
@@ -143,17 +158,17 @@ class szavazokModel {
 				`alternativa_id`, 
 				`pozicio`,
 				`ada0`, `ada1`, `ada2`, `ada3`,
-				`fordulo`
+				`fordulo`,`secret`
 				)
 				VALUES
 				(8, 
-				'.$db->quote($oevk).', 
+				'.$db->quote($szavazas_id).', 
 				'.$db->quote($user->id).', 
 				'.$db->quote($user->id).', 
 				'.$db->quote($w2[0]).', 
 				'.$db->quote($w2[1]).',
 				'.$ada0.','.$ada1.','.$ada2.','.$ada3.',
-				'.$db->quote($fordulo).'
+				'.$db->quote($fordulo).','.$secret.'
 				)
 			');
 			if ($db->query() != true) {
@@ -165,27 +180,53 @@ class szavazokModel {
 		// delete cached report
 		$db->setQuery('UPDATE #__eredmeny 
 		SET report="" 
-		WHERE pollid='.$db->quote($oevk).' and fordulo='.$db->quote($fordulo) );
+		WHERE pollid='.$db->quote($szavazas_id).' and fordulo='.$db->quote($fordulo) );
 		$db->query();
+
+		if ($result) 
+			$db->setQuery('COMMIT');
+		else
+			$db->setQuery('ROLLBACK');
+		$db->queery();
+
 		return $result;
 	}	
 	
-	public function szavazatDelete($oevk, $user, $fordulo) {
+	/**
+	* biztonságos törlés: s
+	* 1. update szavazat_id =0 - ezt az egy modositást engedi meg a trigger (ha a megfelelõ secret van megadva)
+	* 2. fizikai törlés - a trigger csk szavazat_id=0 -t enged törölni
+	*/
+	public function szavazatDelete($szavazas_id, $user, $fordulo, $secret) {
 		$result = true;
 		$db = JFactory::getDBO();
-		$db->setQuery('delete 
-		from #__szavazatok 
-		where user_id='.$db->quote($user->id).' and fordulo='.$db->quote($fordulo));
+
+		$db->setQuery('START TRANSACTION');
+		$db->queery();
+
+		$db->setQuery('update #__szavazatok 
+		set szavazas_id=0, user_id = 0, secret='.$secret.'
+		where user_id='.$db->quote($user->id).' and fordulo='.$db->quote($fordulo).' and szavazas_id='.$db->quote($szavazas_id));
 		$result = $db->query();
 		$this->errorMsg = $db->getErrorMsg();
+		if ($result) {
+			$db->setQuery('delete from #__szavazatok where szavazas_id = 0');
+			$result = $db->query();
+			$this->errorMsg = $db->getErrorMsg();
+		}
 		// delete cached report
 		$db->setQuery('UPDATE #__eredmeny 
 		SET report="" 
-		WHERE pollid='.$db->quote($oevk).' and fordulo='.$db->quote($fordulo) );
+		WHERE pollid='.$db->quote($szavazas_id).' and fordulo='.$db->quote($fordulo) );
 		$db->query();
+
+		if ($result) 
+			$db->setQuery('COMMIT');
+		else
+			$db->setQuery('ROLLBACK');
+		$db->queery();
+
 		return $result;  
 	}
-		
-	
 }  
 ?>

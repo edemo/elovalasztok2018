@@ -44,7 +44,11 @@ echo '<h2>'.$item->oevkNev.'</h2>
 <div id="divTurelem" style="display:none; background-color:transparent; cursor:default;"></div>
 <form method="post" action="'.JURI::root().'index.php?option=com_jumi" name="szavazatForm" id="szavazatForm">
 <input type="hidden" name="view" value="application" />
+<<<<<<< HEAD
 <input type="hidden" name="fileid" value="4"/>
+=======
+<input type="hidden" name="fileid" value="5"/>
+>>>>>>> f50828945db4e68422012014f1ae5575a52444c0
 <input type="hidden" name="task" value="szavazatSave" /> 
 <input type="hidden" name="task" value="szavazatSave" />
 <input type="hidden" name="nick" value="'.$user->username.'" />
@@ -83,7 +87,10 @@ echo '</ul>
 <center><button type="button" onclick="okClick();" class="btn btn-primary btn-ok">Szavazat beküldése</button>
 <button type="button" onclick="location='."'$cancelUrl'".'" class="btn btn-cancel">Mégsem</button></center>
 </form>
+<<<<<<< HEAD
 </div>
+=======
+>>>>>>> f50828945db4e68422012014f1ae5575a52444c0
 ';
 ?>
 <script type="text/javascript">

@@ -9,10 +9,13 @@
   *
   * JRequest: oevk, task
   */
+<<<<<<< HEAD
 
 include_once JPATH_SITE.'/elovalasztok/accescontrol.php';  
 include_once JPATH_SITE.'/elovalasztok/funkciok.php';  
   
+=======
+>>>>>>> f50828945db4e68422012014f1ae5575a52444c0
 class szavazokModel {
 	private $errorMsg = '';
 	function __construct() {
@@ -65,6 +68,7 @@ class szavazokModel {
 	  * @param integer oevk_id
 	  * @return {"oevkId":szám, "oevkNev":string, "alternativak":[{"id":szám,"nev":string},....]}
 	*/  
+<<<<<<< HEAD
 	public function getItem($szavazas_id) {
 		$db = JFactory::getDBO();
 		$result = new stdClass();
@@ -72,12 +76,25 @@ class szavazokModel {
 		$result->oevkNev = '';
 		$result->alternativak = array();
 		$db->setQuery('select * from #__categories where id='.$db->quote($szavazas_id));
+=======
+	public function getItem($oevk) {
+		$db = JFactory::getDBO();
+		$result = new stdClass();
+		$result->oevkId = $oevk;
+		$result->oevkNev = '';
+		$result->alternativak = array();
+		$db->setQuery('select * from #__categories where id='.$db->quote($oevk));
+>>>>>>> f50828945db4e68422012014f1ae5575a52444c0
 		$res = $db->loadObject(); 
 		if ($res) {
 			$result->oevkNev = $res->title;
 			$db->setQuery('select *
 			from #__content
+<<<<<<< HEAD
 			where catid = '.$db->quote($szavazas_id).' 
+=======
+			where catid = '.$db->quote($oevk).'
+>>>>>>> f50828945db4e68422012014f1ae5575a52444c0
 			order by title');
 			$res = $db->loadObjectList();
 			foreach ($res as $res1) {
@@ -119,6 +136,7 @@ class szavazokModel {
 	  * @param integer fordulo
 	  * @return boolean
 	*/  
+<<<<<<< HEAD
 	public function save($szavazas_id, $szavazat, $user, $fordulo) {
 		$result = true;
 		$msg = '';
@@ -130,16 +148,31 @@ class szavazokModel {
 		$db = JFactory::getDBO();
 		$db->setQuery('delete from #__szavazatok 
 		where user_id='.$db->quote($user->id).' and fordulo='.$db->quote($fordulo).' and szavazas_id = '.$db->quote($szavazas_id));
+=======
+	public function save($oevk, $szavazat, $user, $fordulo) {
+		$result = true;
+		
+		// elõõ törlés
+		$db = JFactory::getDBO();
+		$db->setQuery('delete from #__szavazatok where user_id='.$db->quote($user->id).' and fordulo='.$db->quote($fordulo));
+>>>>>>> f50828945db4e68422012014f1ae5575a52444c0
 		$db->query();
 		// ada hitelesitési szint
 		$ada0 = 0;
 		$ada1 = 0;
 		$ada2 = 0;
 		$ada3 = 0;
+<<<<<<< HEAD
 		if (substr($user->params,0,1)=='[') $ada0 = 1;   // ADA
 		if (strpos($user->params,'hash') > 0) $ada1 = 1; // ADA személyes adatok alapján
 		if (strpos($user->params,'email') > 0) $ada2 = 1; // ADA email aktiválás
 		if (strpos($user->params,'magyar') > 0) $ada3 = 1; // ADA személyesen ellenörzött
+=======
+		if (substr($user->activation,0,1)=='[') $ada0 = 1;   // ADA
+		if (strpos($user->activation,'hash') > 0) $ada1 = 1; // ADA személyes adatok alapján
+		if (strpos($user->activation,'email') > 0) $ada2 = 1; // ADA email aktiválás
+		if (strpos($user->activation,'magyar') > 0) $ada3 = 1; // ADA személyesen ellenörzött
+>>>>>>> f50828945db4e68422012014f1ae5575a52444c0
 		// string részekre bontása és tárolás ciklusban
 		$w1 = explode(',',$szavazat);
 		foreach ($w1 as $item) {
@@ -156,7 +189,11 @@ class szavazokModel {
 				)
 				VALUES
 				(8, 
+<<<<<<< HEAD
 				'.$db->quote($szavazas_id).', 
+=======
+				'.$db->quote($oevk).', 
+>>>>>>> f50828945db4e68422012014f1ae5575a52444c0
 				'.$db->quote($user->id).', 
 				'.$db->quote($user->id).', 
 				'.$db->quote($w2[0]).', 
@@ -174,25 +211,46 @@ class szavazokModel {
 		// delete cached report
 		$db->setQuery('UPDATE #__eredmeny 
 		SET report="" 
+<<<<<<< HEAD
 		WHERE pollid='.$db->quote($szavazas_id).' and fordulo='.$db->quote($fordulo) );
+=======
+		WHERE pollid='.$db->quote($oevk).' and fordulo='.$db->quote($fordulo) );
+>>>>>>> f50828945db4e68422012014f1ae5575a52444c0
 		$db->query();
 		return $result;
 	}	
 	
+<<<<<<< HEAD
 	public function szavazatDelete($szavazas_id, $user, $fordulo) {
+=======
+	public function szavazatDelete($oevk, $user, $fordulo) {
+>>>>>>> f50828945db4e68422012014f1ae5575a52444c0
 		$result = true;
 		$db = JFactory::getDBO();
 		$db->setQuery('delete 
 		from #__szavazatok 
+<<<<<<< HEAD
 		where user_id='.$db->quote($user->id).' and fordulo='.$db->quote($fordulo).' and szavazas_id='.$db->quote($szavazas_id));
+=======
+		where user_id='.$db->quote($user->id).' and fordulo='.$db->quote($fordulo));
+>>>>>>> f50828945db4e68422012014f1ae5575a52444c0
 		$result = $db->query();
 		$this->errorMsg = $db->getErrorMsg();
 		// delete cached report
 		$db->setQuery('UPDATE #__eredmeny 
 		SET report="" 
+<<<<<<< HEAD
 		WHERE pollid='.$db->quote($szavazas_id).' and fordulo='.$db->quote($fordulo) );
 		$db->query();
 		return $result;  
 	}
+=======
+		WHERE pollid='.$db->quote($oevk).' and fordulo='.$db->quote($fordulo) );
+		$db->query();
+		return $result;  
+	}
+		
+	
+>>>>>>> f50828945db4e68422012014f1ae5575a52444c0
 }  
 ?>

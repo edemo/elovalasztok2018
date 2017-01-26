@@ -18,6 +18,7 @@ Normál Joomla 3 telepités
 
 . Dizájn kialakitása - joomla template, css, images stb
 
+<<<<<<< HEAD
 Biztonsági megjegyzések
 -----------------------
 
@@ -74,5 +75,7 @@ Szavazat modosítása
  
 
 
+=======
+>>>>>>> f50828945db4e68422012014f1ae5575a52444c0
 
 

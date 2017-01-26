@@ -40,8 +40,12 @@ class Condorcet {
       // FT 2015.02.13  az egyes alternativákat (key=alternativa.id) hányan rangsorolták
       //                a lehetőségek első felébe
       private $accpted = null;
+<<<<<<< HEAD
 	  // FT 2017.01.25. hányn sorolták első helyre?
 	  private $inFirst = null;
+=======
+      
+>>>>>>> f50828945db4e68422012014f1ae5575a52444c0
       private $db = null;
       private $shortlist = null;
 
@@ -234,6 +238,7 @@ class Condorcet {
           foreach ($res as $row) {
             $this->accepted[$row->alternativa_id] = $row->cc;
           }
+<<<<<<< HEAD
 
 		  // FT 2017.01.25. hányn sorolták első helyre?
           $this->inFirst = array();
@@ -252,6 +257,8 @@ class Condorcet {
             $this->inFirst[$row->alternativa_id] = $row->cc;
           }
 
+=======
+>>>>>>> f50828945db4e68422012014f1ae5575a52444c0
           return $this->dMatrix;
       }
 
@@ -299,18 +306,27 @@ class Condorcet {
             $atlagok[$res1->megnevezes] = $res1->pozicio;
           }
           
+<<<<<<< HEAD
           $result =  '<table class="pollResult" border="1" width="100%">
                      <tr><th>Megnevezés</th><th>Átlag poziió</th>
                      <th>Első helyen</th>
                      </th><th>Elfogadható</th>
                      <th colspan="2">Condorce-Shulze érték</th>
                      </tr>'."\n";
+=======
+          $result =  '<table class="pollResult" border="1" width="100%">'."\n".
+                     '<tr><th>Megnevezés</th><th>Átlag poziió</th>
+                     </th><th>Elfogadható</th>
+                     <th colspan="2">Condorce-Shulze érték</th>'.
+                     '</tr>'."\n";
+>>>>>>> f50828945db4e68422012014f1ae5575a52444c0
 		  $helyezes = 1;			 
           foreach($shortlist as $i) {
               if ($values[$shortlist[0]] > 0)
                 $w2 = round($values[$i] * (300/$values[$shortlist[0]]));
               else
                 $w2 = 0;  
+<<<<<<< HEAD
               $result .= '<tr><td class="left">'.$this->candidates[$i].'</td>
                              <td class="right">'.$atlagok[$this->candidates[$i]].'</td>
                              <td class="right">'.$this->inFirst[$i].'</td>
@@ -319,6 +335,14 @@ class Condorcet {
                              <td class="left"><div style="display:inline-block; background-color:blue; width:'.$w2.'px;">&nbsp;</div>&nbsp;</td>
                          </tr>
 						 ';
+=======
+              $result .= "<tr><td>".$this->candidates[$i]."</td>".
+                             "<td>".$atlagok[$this->candidates[$i]]."</td>".
+                             "<td>".$this->accepted[$i]."</td>".
+                             "<td>".$values[$i]."</td>".
+                             '<td><div style="display:inline-block; background-color:blue; width:'.$w2.'px;">&nbsp;</div>&nbsp;</td>'.
+                         "</tr>\n";
+>>>>>>> f50828945db4e68422012014f1ae5575a52444c0
               if ($values[$i] > $maxValue) $maxValue = $values[$i];
 			  if ($helyezes == 1) $this->c1 = $i;
 			  if ($helyezes == 2) $this->c2 = $i;

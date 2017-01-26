@@ -8,7 +8,9 @@ class accesscontrolTest extends PHPUnit_Framework_TestCase {
 		$viewName = '';
 		define('JPATH_COMPONENT', 'elovalasztok');
 		$testData->addDbResult(JSON_encode('{}'));
-		require_once "accesscontrol.php";
+		require_once dirname(__FILE__).'\..\accesscontrol.php';
+		require_once dirname(__FILE__).'\..\funkciok.php';
+		require_once dirname(__FILE__).'\..\config.php';
 		parent::__construct();
 	}
 	protected function setupConfig() {
@@ -22,7 +24,7 @@ class accesscontrolTest extends PHPUnit_Framework_TestCase {
 		$this->setupConfig();
 		$testUser->id = 1;
 		$testData->addDbResult(false);
-		$res = szavazottMar(1, $user, 0);
+		$res = szavazottMar(10, $user, 0);
         	$this->assertEquals(false, $res);
     	}
     	public function test_szavazottMar_igen()  {
@@ -30,7 +32,7 @@ class accesscontrolTest extends PHPUnit_Framework_TestCase {
 		$this->setupConfig();
 		$testUser->id = 1;
 		$testData->addDbResult(JSON_decode('[{"id":1}]'));
-		$res = szavazottMar(1, $testUser, 0);
+		$res = szavazottMar(10, $testUser, 0);
         	$this->assertEquals(true, $res);
     	}
     	public function test_szavazottMar_nincsbelepve()  {
@@ -38,53 +40,53 @@ class accesscontrolTest extends PHPUnit_Framework_TestCase {
 		$this->setupConfig();
 		$testUser->id = 0;
 		$testData->addDbResult(false);
-		$res = szavazottMar(1, $testUser, 0);
+		$res = szavazottMar(10, $testUser, 0);
         	$this->assertEquals(false, $res);
     	}
 	public function test_teheti_jeloltAdd_superuser() { 	
-		global $testData,$componentName, $testUser,$config;
+		global $testData,$componentName, $testUser,$evConfig;
 		$this->setupConfig();
 		$testUser->id = 1;
 		$testUser->groups = array();
 		$testUser->groups[8] = 8;
-		$config->jeloltAdd = true;
+		$evConfig->jeloltAdd = true;
 		$msg = '';
-		$res = 	teheti($oevk, $testUser, 'jeloltAdd', $msg);
+		$res = 	teheti(10, $testUser, 'jeloltAdd', $msg);
         	$this->assertEquals(true, $res);
 		$this->assertEquals('',$msg);
 	}
 	public function test_teheti_jeloltAdd_elovalasztokadmin() { 	
-		global $testData,$componentName, $testUser,$config;
+		global $testData,$componentName, $testUser,$evConfig;
 		$this->setupConfig();
 		$testUser->id = 1;
 		$testUser->groups = array();
 		$testUser->groups[10] = 10;
-		$config->jeloltAdd = true;
+		$evConfig->jeloltAdd = true;
 		$msg = '';
-		$res = 	teheti($oevk, $testUser, 'jeloltAdd', $msg);
+		$res = 	teheti(10, $testUser, 'jeloltAdd', $msg);
         	$this->assertEquals(true, $res);
 		$this->assertEquals('',$msg);
 	}
 	public function test_teheti_jeloltAdd_normaluser() { 	
-		global $testData,$componentName, $testUser,$config;
+		global $testData,$componentName, $testUser,$evConfig;
 		$this->setupConfig();
 		$testUser->id = 1;
 		$testUser->groups = array();
-		$config->jeloltAdd = true;
+		$evConfig->jeloltAdd = true;
 		$msg = '';
-		$res = 	teheti($oevk, $testUser, 'jeloltAdd', $msg);
+		$res = 	teheti(10, $testUser, 'jeloltAdd', $msg);
         	$this->assertEquals(false, $res);
 		$this->assertEquals('Nincs ehhez joga!',$msg);
 	}
 	public function test_teheti_jeloltAdd_configTilt() { 	
-		global $testData,$componentName, $testUser,$config;
+		global $testData,$componentName, $testUser,$evConfig;
 		$this->setupConfig();
 		$testUser->id = 1;
 		$testUser->groups = array();
 		$testUser->groups[10] = 10;
-		$config->jeloltAdd = false;
+		$evConfig->jeloltAdd = false;
 		$msg = '';
-		$res = 	teheti($oevk, $testUser, 'jeloltAdd', $msg);
+		$res = 	teheti(10, $testUser, 'jeloltAdd', $msg);
         	$this->assertEquals(false, $res);
 		$this->assertEquals('config',$msg);
 	}

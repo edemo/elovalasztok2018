@@ -7,17 +7,12 @@
   * web: github.com/utopszkij/elovalasztok2018
   * Verzió: V1.00  2016.09.14.
   */
-  include_once JPATH_SITE.'/elovalasztok/funkciok.php';
-  include_once JPATH_SITE.'/elovalasztok/config.php';
+  include_once dirname(__FILE__).'/funkciok.php';
+  include_once dirname(__FILE__).'/config.php';
   
-  global $config;
-  $db = Jfactory::getDBO();
-  $db->setQuery('select * from #__jumi where id=1');
-  $res = $db->loadObject();
-  $s = $res->custom_script;
-  $config = JSON_decode($s);
-  if (!isset($config->fordulo)) $config->fordulo = 0;
-  if ($config->fordulo == '') $config->fordulo = 0;
+  global $evConfig;
+  if (!isset($evConfig->fordulo)) $evConfig->fordulo = 0;
+  if ($evConfig->fordulo == '') $evConfig->fordulo = 0;
   
   
   /**
@@ -30,6 +25,7 @@
   function szavazottMar($szavazas_id, $user, $fordulo = 0) {
 	  global $evConfig;
 	  $db = JFactory::getDBO();
+	  $result = false;
 	  if ($user->id > 0) {
 		if (isOEVKszavazas($szavazas_id)) {  
 	      $db->setQuery('select * from #__szavazatok 

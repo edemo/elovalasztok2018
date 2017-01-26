@@ -1,7 +1,7 @@
 <?php
 // elõválasztok rendszer globális konstansok, funkciók, objektumok
 
-include_once JPATH_SITE.'/elovalasztok/config.php';
+include_once dirname(__FILE__).'/config.php';
 
 // ez a kategoria egy belsõ szavazás?
 function isBelsoSzavazas($szavazas_id) {
@@ -38,7 +38,6 @@ function isElovalasztokAdmin($user) {
 function isMozgalomTag($user) {
 	global $evConfig;
 	$result = false;
-	$userProfile = JUserHelper::getProfile( $user->id );
 	$db = JFactory::getDBO();
 	$db->setQuery('select profile_value
 	from #__user_profiles

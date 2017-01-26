@@ -13,9 +13,9 @@
   */
 
   global $config; 
-  include_once JPATH_SITE.'/elovalasztok/accesscontrol.php';
-  include_once JPATH_SITE.'/elovalasztok/funkciok.php';
-  include_once JPATH_SITE.'/elovalasztok/config.php';
+  include_once dirname(__FILE__).'/accesscontrol.php';
+  include_once dirname(__FILE__).'/funkciok.php';
+  include_once dirname(__FILE__).'/config.php';
 
 
   $user = JFactory::getUser();

@@ -9,11 +9,11 @@
   *
   * JRequest: oevk, task
   */
-  global $config;
-  include_once JPATH_ROOT.'/elovalasztok/accesscontrol.php';
-  include_once JPATH_ROOT.'/elovalasztok/models/szavazok.php';
-  include_once JPATH_ROOT.'/elovalasztok/funkciok.php';
-  include_once JPATH_ROOT.'/elovalasztok/config.php';
+  global $evConfig;
+  include_once dirname(__FILE__).'/accesscontrol.php';
+  include_once dirname(__FILE__).'/models/szavazok.php';
+  include_once dirname(__FILE__).'/funkciok.php';
+  include_once dirname(__FILE__).'/config.php';
   
   $user = JFactory::getUser();
   $msg = '';
@@ -43,7 +43,7 @@
     * @param string filter
     */ 	
     public function szavazok($oevk, $user, $filter) {
-		global $config;
+		global $evConfig;
 		$msg = '';
 		if ($oevk <= 0) {
 			echo '<div class="warning">Válassza ki az Egyéni országygyülési választó kerületet!</div>';
@@ -83,7 +83,7 @@
     * @param string filter
     */ 	
     public function szavazatEdit($oevk, $user, $filter) {
-		global $config;
+		global $evConfig;
 		$msg = '';
 		if ($oevk <= 0) {
 			echo '<div class="warning">Válassza ki az Egyéni országygyülési választó kerületet!</div>';
@@ -158,7 +158,7 @@
     * @param string filter
     */ 	
     public function szavazatDelete2($oevk, $user, $filter) {
-		global $config;
+		global $evConfig;
 		Jsession::checkToken() or die('invalid CSRF protect token');
 		$input = JFactory::getApplication()->input;  
 		$secret = $input->get('secret');
@@ -172,7 +172,7 @@
 		   } else {
 		    if (teheti($oevk, $user, 'szavazatDelete', $msg)) {
 		      $model = new szavazokModel();
-			  if ($model->szavazatDelete($oevk, $user, $config->fordulo, $secret)) {
+			  if ($model->szavazatDelete($oevk, $user, $evConfig->fordulo, $secret)) {
 				  $msg = 'szavazata törölve lett.';
 				  $msgClass = 'info';
 				  $cookie_name = 'voks_'.$oevk;
@@ -206,7 +206,7 @@
     * @param string filter
     */ 	
     public function eredmeny($oevk, $user, $filter) {
-		global $config;
+		global $evConfig;
 		$db = JFactory::getDBO();
 		$this->mysqlUserToken($user);
 		$model = new szavazokModel();
@@ -228,7 +228,7 @@
 			               #__eredmeny 
 						   where pollid='.$db->quote($pollid).' and 
 			                     filter='.$db->quote($filter).' and
-								 fordulo = '.$db->quote($config->fordulo) );
+								 fordulo = '.$db->quote($evConfig->fordulo) );
 			$cache = $db->loadObject();
 			
 			// ha nincs meg a cache rekord akkor hozzuk most létre, üres tartalommal
@@ -236,12 +236,12 @@
 			  $db->setQuery('INSERT INTO #__eredmeny
 			  (pollid, report,filter,fordulo ) 
 			  value 
-			  ('.$db->quote($pollid).',"","'.$filter.'",'.$db->quote($config->fordulo).')');
+			  ('.$db->quote($pollid).',"","'.$filter.'",'.$db->quote($evConfig->fordulo).')');
 			  $db->query();
 			  $cache = new stdClass();
 			  $cache->pollid = $pollid;
 			  $cache->filter = $filter;
-			  $cache->fordulo = $config->fordulo;
+			  $cache->fordulo = $evConfig->fordulo;
 			  $cache->report = "";
 			}
 			
@@ -249,7 +249,7 @@
 			
 			if ($cache->report == "") {
 			  // ha nincs; most  kell condorcet/Shulze feldolgozás feldolgozás
-			  $schulze = new Condorcet($db,$organization,$pollid,$filter,$config->fordulo);
+			  $schulze = new Condorcet($db,$organization,$pollid,$filter,$evConfig->fordulo);
 			  $report = $schulze->report();
 			  $db->setQuery('update #__eredmeny 
 			  set report='.$db->quote($report).',
@@ -264,7 +264,7 @@
 			      c9 = '.$schulze->c9.',
 			      c10 = '.$schulze->c10.',
 				  vote_count = '.$schulze->vote_count.'
-			  where pollid="'.$pollid.'" and filter='.$db->quote($filter).' and fordulo='.$db->quote($config->fordulo));
+			  where pollid="'.$pollid.'" and filter='.$db->quote($filter).' and fordulo='.$db->quote($evConfig->fordulo));
 			  $db->query();
 			} else {  
 			  // ha van akkor a cahcelt reportot jelenitjuük meg
@@ -280,7 +280,7 @@
 	  * JRequest: token, oevk, szavazat jelölt_id=pozicio, ......
 	  */
 	public function szavazatSave($oevk, $user, $filter) {
-		global $config;
+		global $evConfig;
 		Jsession::checkToken() or die('invalid CSRF protect token');
 		if ($user->id <= 0) die('nincs bejelentkezve, vagy lejárt a session');
 		$input = JFactory::getApplication()->input;  
@@ -288,7 +288,7 @@
 		$msg = '';
 		$msgClass = '';
 		if ($oevk > 0) {
-			if (szavazottMar($oevk, $user, $config->fordulo))
+			if (szavazottMar($oevk, $user, $evConfig->fordulo))
 				$akcio = 'szavazatEdit';
 			else
 				$akcio = 'szavazas'; 
@@ -296,7 +296,7 @@
 				$model = new szavazokModel();
 				$secret = rand(100000,999999);
 				$this->mysqlUserToken($user);
-				if ($model->save($oevk, $szavazat, $user, $config->fordulo, $secret)) {
+				if ($model->save($oevk, $szavazat, $user, $evConfig->fordulo, $secret)) {
 					$_COOCIE['voks_'.$oevk] = $secret;
 					$msg = 'Köszönjük szavazatát. Szavazatát a rendszer tárolta.<br /><br />'.
 					       'Szavazat biztonsági kód:<strong>'.$secret.'</strong><br /><br />'.

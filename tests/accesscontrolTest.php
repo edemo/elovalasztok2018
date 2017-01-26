@@ -8,9 +8,9 @@ class accesscontrolTest extends PHPUnit_Framework_TestCase {
 		$viewName = '';
 		define('JPATH_COMPONENT', 'elovalasztok');
 		$testData->addDbResult(JSON_encode('{}'));
-		require_once dirname(__FILE__).'\..\accesscontrol.php';
-		require_once dirname(__FILE__).'\..\funkciok.php';
-		require_once dirname(__FILE__).'\..\config.php';
+		require_once dirname(__FILE__).'/../accesscontrol.php';
+		require_once dirname(__FILE__).'/../funkciok.php';
+		require_once dirname(__FILE__).'/../config.php';
 		parent::__construct();
 	}
 	protected function setupConfig() {

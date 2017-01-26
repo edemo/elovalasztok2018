@@ -1,14 +1,11 @@
 <?php
 // input adat: $oevk, $report, $filter
-<<<<<<< HEAD
 
 $db = JFactory::getDBO();
 $db->setQuery('select count(user_id) as cc from #__szavazatok where szavazas_id = '.$db->quote($oevk));
 $res = $db->loadObject();
 $voksDarab = $res->cc;
 
-=======
->>>>>>> f50828945db4e68422012014f1ae5575a52444c0
 ?>
     <form action="index.php?option_com_jumi&view=application&fileid=5" method="get">
 	<input type="hidden" name="option" value="com_jumi" />
@@ -16,11 +13,8 @@ $voksDarab = $res->cc;
 	<input type="hidden" name="fileid" value="5" />
 	<input type="hidden" name="oevk" value="<?php echo $oevk; ?>" />
 	<input type="hidden" name="task" value="eredmeny" />
-<<<<<<< HEAD
 
 	<div style="display:none">
-=======
->>>>>>> f50828945db4e68422012014f1ae5575a52444c0
 	Szűrés <select name="filter" style="width:390px">
 	   <option value=""<?php if ($filter=='') echo ' selected="selected"'; ?>>
 	      Minden szavazó
@@ -38,7 +32,6 @@ $voksDarab = $res->cc;
 	      ADA ellenörzöttek
 	   </option> 
 	   
-<<<<<<< HEAD
 	</select>
 	<button type="submit" class="btn btn-primary">Szűrést módosít</button>
 	</div>   
@@ -54,17 +47,6 @@ $voksDarab = $res->cc;
       <div class="noVoksInfo">Nincsenek szavazatok ebben a szavazásban.</div>	
 	<?php endif; ?>
 	
-=======
-	   
-	</select>
-	<button type="submit" class="btn btn-primary">Szűrést módosít</button>
-	</form>';
-
-	<p><button type="button" onclick="infoClick()" id="infoBtn">+</button>
-		Kiértékelés részletei
-	</p>	
-	<?php echo $report ?>
->>>>>>> f50828945db4e68422012014f1ae5575a52444c0
 	<center><br />
 	<button type="button" onclick="location='<?php echo $backUrl; ?>';" style="height:34px" class="btn btn-primary btn-back">Vissza</button>
 	</center>

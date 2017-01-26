@@ -10,15 +10,10 @@
   * JRequest: oevk, task
   */
   global $config;
-<<<<<<< HEAD
   include_once JPATH_ROOT.'/elovalasztok/accesscontrol.php';
   include_once JPATH_ROOT.'/elovalasztok/models/szavazok.php';
   include_once JPATH_ROOT.'/elovalasztok/funkciok.php';
   include_once JPATH_ROOT.'/elovalasztok/config.php';
-=======
-  include JPATH_ROOT.'/elovalasztok/accesscontrol.php';
-  include JPATH_ROOT.'/elovalasztok/models/szavazok.php';
->>>>>>> f50828945db4e68422012014f1ae5575a52444c0
   
   $user = JFactory::getUser();
   $msg = '';
@@ -26,16 +21,12 @@
   $oevk = $input->get('oevk');
   $filter = $input->get('filter','','STRING');
   $task = $input->get('task');
-<<<<<<< HEAD
   $secret = $input->get('secret');
   $id = $input->get('id',0);
   
   if ($oevk == 0) {
 	  $oevk = $id;
   }
-=======
-  
->>>>>>> f50828945db4e68422012014f1ae5575a52444c0
   
   function base64url_encode2($data) { 
 	  return rtrim(strtr(base64_encode($data), '+/', '-_'), '='); 
@@ -44,7 +35,6 @@
   
   // ================ controller ==============================
   class szavazoController {
-<<<<<<< HEAD
 	  
 	/**
     * szavazó képernyő megjelenitése  - új szavazat beküldése
@@ -52,8 +42,6 @@
     * @param JUser user 
     * @param string filter
     */ 	
-=======
->>>>>>> f50828945db4e68422012014f1ae5575a52444c0
     public function szavazok($oevk, $user, $filter) {
 		global $config;
 		$msg = '';
@@ -71,10 +59,7 @@
 			    echo '<div class="warning">Nincs egyetlen jelölt sem.</div>';
 			  } else {
 		       include JPATH_ROOT.'/elovalasztok/views/szavazoform.php'; 
-<<<<<<< HEAD
 			   $this->mysqlUserToken($user);
-=======
->>>>>>> f50828945db4e68422012014f1ae5575a52444c0
 			  }  
 		    } else {
 			  echo '<div class="error">Jelenleg nem szavazhat</div>';
@@ -91,15 +76,12 @@
 		}
 	}
 	
-<<<<<<< HEAD
 	/**
     * szavazó képernyő megjelenitése - szavazat modosítás
 	* @param integer szavazás azonosító
     * @param JUser user 
     * @param string filter
     */ 	
-=======
->>>>>>> f50828945db4e68422012014f1ae5575a52444c0
     public function szavazatEdit($oevk, $user, $filter) {
 		global $config;
 		$msg = '';
@@ -117,10 +99,7 @@
 			    echo '<div class="warning">Nincs egyetlen jelölt sem.</div>';
 			  } else {
 		       include JPATH_ROOT.'/elovalasztok/views/szavazoform.php'; 
-<<<<<<< HEAD
 			   $this->mysqlUserToken($user);
-=======
->>>>>>> f50828945db4e68422012014f1ae5575a52444c0
 			  }  
 		    } else {
 			  echo '<div class="error">Jelenleg nem módosíthatja szavazatát</div>';
@@ -135,7 +114,6 @@
 			';
 		}
 	}
-<<<<<<< HEAD
 	
 	/**
     * szavazat törlés megerösítő képernyő
@@ -184,11 +162,6 @@
 		Jsession::checkToken() or die('invalid CSRF protect token');
 		$input = JFactory::getApplication()->input;  
 		$secret = $input->get('secret');
-=======
-
-    public function szavazatDelete($oevk, $user, $filter) {
-		global $config;
->>>>>>> f50828945db4e68422012014f1ae5575a52444c0
 		$msg = '';
 		if ($oevk <= 0) {
 			echo '<div class="warning">Válassza ki az Egyéni országygyülési választó kerületet!</div>';
@@ -199,7 +172,6 @@
 		   } else {
 		    if (teheti($oevk, $user, 'szavazatDelete', $msg)) {
 		      $model = new szavazokModel();
-<<<<<<< HEAD
 			  if ($model->szavazatDelete($oevk, $user, $config->fordulo, $secret)) {
 				  $msg = 'szavazata törölve lett.';
 				  $msgClass = 'info';
@@ -208,13 +180,6 @@
 				  setcookie($cookie_name, $cookie_value, time() + (86400 * 30), "/"); // 86400 = 1 day					
 			  } else {
 				  $msg = 'Hiba a szavazat törlés közben, a szavazat nem lett törölve (lehet, hogy hibás biztonsági kulcsot adott meg)';
-=======
-			  if ($model->szavazatDelete($oevk, $user, $config->fordulo)) {
-				  $msg = 'szavazata törölve lett.';
-				  $msgClass = 'info';
-			  } else {
-				  $msg = $model->getErrorMsg();
->>>>>>> f50828945db4e68422012014f1ae5575a52444c0
 				  $msgClass = 'error';
 			  }
 		      JControllerLegacy::setMessage($msg,$msgClass);
@@ -234,7 +199,6 @@
 		}
 	}
 
-<<<<<<< HEAD
 	/**
     * szavazás eredményének megjelenitése
 	* @param integer szavazás azonosító
@@ -245,11 +209,6 @@
 		global $config;
 		$db = JFactory::getDBO();
 		$this->mysqlUserToken($user);
-=======
-    public function eredmeny($oevk, $user, $filter) {
-		global $config;
-		$db = JFactory::getDBO();
->>>>>>> f50828945db4e68422012014f1ae5575a52444c0
 		$model = new szavazokModel();
 		if ($oevk <= 0) {
 			echo '<div class="warning">Válassza ki az Egyéni országygyülési választó kerületet!</div>';
@@ -335,7 +294,6 @@
 				$akcio = 'szavazas'; 
 			if (teheti($oevk, $user, $akcio, $msg)) {
 				$model = new szavazokModel();
-<<<<<<< HEAD
 				$secret = rand(100000,999999);
 				$this->mysqlUserToken($user);
 				if ($model->save($oevk, $szavazat, $user, $config->fordulo, $secret)) {
@@ -350,13 +308,6 @@
 					setcookie($cookie_name, $cookie_value, time() + (86400 * 30), "/"); // 86400 = 1 day					
 				} else {
 					$msg = 'Hiba a szavazat tárolása közben. A szavazat nem lett tárolva';
-=======
-				if ($model->save($oevk, $szavazat, $user, $config->fordulo)) {
-					$msg = 'Köszönjük szavazatát.';
-				    $msgClass = 'info';
-				} else {
-					$msg = $model->getErrorMsg();
->>>>>>> f50828945db4e68422012014f1ae5575a52444c0
 					$msgClass = 'error';
 				}	
 			} else {
@@ -365,7 +316,6 @@
 		} else {
 			$msg = 'Nincs kiválasztva az OEVK';
 			$msgClass = 'error';
-<<<<<<< HEAD
 		}
 		if ($msg != '')
 		   JControllerLegacy::setMessage($msg,$msgClass);
@@ -393,15 +343,6 @@
 		else
 			$db->setQuery('insert into #__usertoken values ('.$db->quote(sha1($user->id)).',"'.date('Y-m-d H:i:s').'")');
 		$db->query();	
-=======
-			
-		}
-		
-		if ($msg != '')
-		   JControllerLegacy::setMessage($msg,$msgClass);
-        JControllerLegacy::setRedirect('index.php?option=com_content&view=category&layout=articles&id='.$oevk);
-		JControllerLegacy::redirect();
->>>>>>> f50828945db4e68422012014f1ae5575a52444c0
 	}
   }
   

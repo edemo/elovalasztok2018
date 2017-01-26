@@ -18,6 +18,19 @@ Normál Joomla 3 telepités
 
 . Dizájn kialakitása - joomla template, css, images stb
 
+
+Documentációk
+-------------
+
+https://drive.google.com/file/d/0ByO-4pNpHazzQmQwZW5BbkdnVTg/view?usp=sharing
+
+
+DEMO 
+----
+
+http://elovalasztok.hu
+
+
 Biztonsági megjegyzések
 -----------------------
 

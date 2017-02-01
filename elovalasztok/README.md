@@ -3,8 +3,6 @@ Ez a 2018 -as előválasztásra készülő Joomla 3 alapú szoftver
 
 A php fájlok joomla JUMI modulok vagy componensek
 
-Telepitett teszt változat: https://elovalasztok.edemokraciagep.org
-
 A projekt jelenleg nem többnyelvű, a magyar szövegkonstansok fixen be vannak írva a kódokba
 
 Telepités:

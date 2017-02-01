@@ -1,0 +1,290 @@
+h5 {font-size:110%}
+h4 {font-size:120%}
+h3 {font-size:130%}
+h2 {font-size:150%}
+h1 {font-size:170%}
+big {font-size:150%; color:red}
+small {font-size:80%}
+div, p {border-style:none; margin:0px; padding:0px;}
+img { border: 0 none; }
+a {color:#3366FF; text-decoration:none}
+a:visited {color:#3366FF}
+a:hover {text-decoration:underline}
+a:active {color:#3366FF}
+a.btn-primary, a.btn-primary:visited, a.btn-primary:hover {color:white}
+
+#all {
+	font-family: Arial;
+	font-size:12px;
+	font-weight:normal;
+	color: #0E2326;
+	line-height:200%;
+}
+
+body {
+    background: #fff;
+    color: #000000;
+    font-size: 100.0%;
+    padding: 0px;
+    text-align: center;
+	background-image:url(../images/keyboard.jpg);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+body.contentpane {
+	width:auto;
+	margin:10px;
+	text-align: left;
+	background-color:white; background-image:none;
+}
+#logo {margin:10px;}
+#all {background-color:white; height:auto; margin:10px 0px 0px 0px}
+#contentarea2 {background-color:white; text-align:left;}
+#header {padding:0px}
+.skiplinks {display:none}
+.unseen {display:none}
+#system-message ul {margin: 0px 0px 0px 5px}
+
+#line {display:none}
+#wrapper {background-color:white}
+#right {padding:10px; background-color:white;}
+.icon-menu {width:20px; height:20px; background-image:url(../images/menu.png); background-position:0px 0px}
+
+.logoheader {height:200px; width:100%; margin:0px 0px 0px 0px}
+.logoheader #logo {float:right;}
+header a,
+header a :visited,
+header a:hover,
+header a:active {color:white}
+#top {border-style:solid; border-width:1px; border-radius: 5px; padding:5px 5px 0px 5px; margin:5px;}
+
+.userInfo {font-size:1.2em; margin-top:10px;}
+.userInfo label {display: inline-block}
+.userinfo var {font-weight:bold}
+
+.itp-socialbuttons-mod h4 {display:none}
+
+.alsoGombok br {display:none}
+.alsoGombok .elovalasztok-gombok button {width:auto; margin-right:10px;}
+
+#lablec {margin:0px; padding:20px 0px 0px 0px; background-color:#9C6F72; width:100%; font-size:100%;}
+#lablec a, #lablec a:hover {color:white;}
+
+.elovalasztok-gombok {margin: 10px 10px 20px 10px}
+.elovalasztok-gombok button {background-image:none; background-color:transparent; border-style:none;
+   height:60px; padding:0px; margin:0px; font-size:100%}
+.elovalasztok-gombok button label {display:block; float:left; padding:15px 0px 0px 5px}   
+.elovalasztok-gombok button:hover i {border-style:solid; border-color:red; border-width:2px;}
+.elovalasztok-gombok button:disabled,
+.elovalasztok-gombok button[disabled=disabled] {background-color:#e0e0e0}
+.icon-login {display:block; float:left;
+             background-image:url(../images/login.png); background-repeat:no-repeat; background-position:2px 8px; 
+             background-color:#B6C6C5;
+             width:50px; height:50px; border-radius:25px}
+.icon-logout {display:block; float:left;
+             background-image:url(../images/logout.png); background-repeat:no-repeat; background-position:12px 8px; 
+             background-color:#B6C6C5;
+             width:50px; height:50px; border-radius:25px}
+.icon-szavazok {display:block; float:left;
+             background-image:url(../images/szavazok.png); background-repeat:no-repeat; background-position:8px 8px; 
+             background-color:#B6C6C5;
+             width:50px; height:50px; border-radius:25px}
+.icon-delete {display:block; float:left;
+             background-image:url(../images/szavazok.png); background-repeat:no-repeat; background-position:8px 8px; 
+             background-color:red;
+             width:50px; height:50px; border-radius:25px}
+.icon-eredmeny {display:block; float:left;
+             background-image:url(../images/eredmeny.png); background-repeat:no-repeat; background-position:10px 8px; 
+             background-color:#B6C6C5;
+             width:50px; height:50px; border-radius:25px}
+.icon-oevk {display:block; float:left;
+             background-image:url(../images/magyarorszag.png); background-repeat:no-repeat; background-position:8px 14px; 
+             background-color:#B6C6C5;
+             width:50px; height:50px; border-radius:25px}
+
+			 
+#rightbar-w ul.nav {border-style:solid; border-width:1px; padding:0px; font-size:110%; background-color:#33AC4B}
+#rightbar-w ul.nav li {border-style:solid; border-width:0px 0px 1px 0px; border-color:white; padding:3px;}
+#sidebar .module ul.menu li a {background-color:transparent; color:white}
+
+#logoutScreen {margin:50px 100px 50px 50px; padding:50px; border-style:solid; border-width:1px;}
+#logoutScreen a {font-size:1.4em; text-decoration:underline}
+#logoutScreen img {width:80px}
+#adalogoutScreen {margin:50px 100px 50px 50px; padding:50px; border-style:solid; border-width:1px;}
+#adalogoutScreen img {width:80px}
+
+.jeloltkereses {border-style:solid; border-width:1px; padding:2px; margin-top:20px; background-color:transparent}
+.jeloltkereses h2 {font-size:120%; text-align:center;}
+
+.item-separator {display:block; border-style:solid; border-width:1px 0px 0px 0px;}
+
+.tamogatas {text-align:right;}
+.tamogatas a {text-decoration:none}
+
+/* kategória lista */
+.blog .cat-children h3 {display:none}
+.blog  li {list-style:none; font-size:120%; margin-bottom:20px;}
+.blog .jeloltekinfo label {display:inline-block; width:auto}
+.blog .jeloltekinfo var {font-size:100%}
+.pull-left {margin: 5px 5px 5px 0px}
+#alternativak .icons {display:none}
+#alternativak .javaslat {background-color:#d0d0d0}
+#alternativak .alternativa {background-color:transparent}
+#alternativak .javaslatControl {text-align:right; padding:2px;}
+.items-leading img {max-width:25%}
+.item-title {font-size:150%}
+.jcomments-links {display:none}
+.logok {clear:both}
+
+/* jelölt oldal */
+.item-pagevk img {max-width:25%}
+.itp-social-buttons-box {margin-bottom:10px}
+
+/* belso szavazás */
+.belsoszavazas-gombok .btn {width:auto; margin-bottom:5px; height:34px; padding-left:32px; padding-right:32px;  background-color:#B1D0DB; color:black;}
+.belsoszavazas-gombok .btn-szavazok {background-image:url(../images/szavazok.png); background-repeat:no-repeat; background-position:2px 0px; background-color:#58CE46;}
+.belsoszavazas-gombok .btn-eredmeny {background-image:url(../images/eredmeny.png); background-repeat:no-repeat; background-position:2px 0px}
+.belsoszavazas-gombok .btn-edit {background-image:url(../images/edit.png); background-repeat:no-repeat; background-position:2px 0px}
+.belsoszavazas-gombok .btn-delete {background-image:url(../images/delete.png); background-repeat:no-repeat; background-position:2px 0px}
+.belsoszavazas-gombok .btn:disabled {background-color:#c0c0c0}
+
+/* comment form */
+#comments-form input {border-style:solid; border-width:1px; border-color:black}
+#comments-form textarea {border-style:solid; border-width:1px; border-color:black}
+#comments-form .btn div {background-image:none}
+#comments-form .btn {background-image:none; background-color: #B1D0DB}
+
+/* szavazó form */
+#prefList {border-style:solid; border-width:1px; border-color:black; margin-bottom:20px;}
+#prefList {list-style:none; text-align:right}
+#prefList label {display:inline-block; text-align:left; cursor:pointer}
+#prefList .prefList-li    {border-style:solid; border-width:0px 0px 1px 0px; border-color:black; padding:5px;}
+#prefList .prefList-li-eq {border-style:dotted; border-width:0px 0px 1px 0px; border-color:#C0C0C0; padding:5px}
+#prefList .pozicio {padding:5px;}
+
+#prefList button {height:40px; width:40px; background-color:#B6C6C5; border-radius:20px; border-style:none; margin-right:5px}
+#prefList button span {display:none}
+#prefList .btn-up {background-image:url(../../../elovalasztok/assets/up.png);  background-position:5px 5px}
+#prefList .btn-up:disabled {background-image:none; background-color:#e0e0e0}
+#prefList .btn-dwn {background-image:url(../../../elovalasztok/assets/down.png); background-position:5px 5px}
+#prefList .btn-dwn:disabled {background-image:none; background-color:#e0e0e0}
+#prefList .btn-eq {background-image:url(../../../elovalasztok/assets/eq.png); background-position:4px 4px; background-repeat:no-repeat
+    z-index:2; margin-bottom:-50px;}
+#prefList .btn-eq:disabled {z-index:1; margin-bottom:0px; background-image:none; background-color:transparent;}
+#prefList .btn-ne {background-image:url(../../../elovalasztok/assets/ne.png); background-position:4px 4px;  background-repeat:no-repeat
+    z-index:2; margin-bottom:-50px}
+#prefList .btn-ne:disabled {z-index:1}
+#voksHelp .icon-up {display:inline-block; width:30px; height:30px; 
+   background-image:url(../../../elovalasztok/assets/up.png); background-position: 0px -10px}
+#voksHelp .icon-down {display:inline-block; width:30px; height:30px; 
+   background-image:url(../../../elovalasztok/assets/down.png); background-position: 0px -10px}
+.btn-delete {background-image:none; background-color:red; color:white; font-weight:bold;}
+.btn-delete:hover {background-image:none; background-color:#d01010; color:white; font-weight:bold;}
+@media (min-width: 800px) and (max-width: 1199px) {
+	#prefList label {width:500px}
+}
+@media (min-width: 600px) and (max-width: 799px) {
+	#prefList label {width:300px}
+}
+@media (min-width: 400px) and (max-width: 599px) {
+	#prefList label {width:100px}
+}
+@media (min-width: 100px) and (max-width: 399px) {
+	#prefList label {width:90px}
+}
+
+
+#searchForm .only {display:none}
+
+/* szervezet logok */
+ul.inline>li a.label {background-image:none; background-color:transparent; border-style:none; color:black;}
+ul.inline>li.tag-2 {background-image:url('../images/logo/mszp_logo.png'); background-color:transparent; background-repeat:no-repeat;
+    height:32px; padding: 8px 5px 5px 34px;}
+ul.inline>li.tag-3 {background-image:url('../images/logo/lmp_logo.png'); background-color:transparent; background-repeat:no-repeat;
+    height:32px; padding: 8px 5px 5px 34px;}
+ul.inline>li.tag-4 {background-image:url('../images/logo/parbeszed_logo.png'); background-color:transparent; background-repeat:no-repeat;
+    height:32px; padding: 8px 5px 5px 34px;}
+ul.inline>li.tag-5 {background-image:url('../images/logo/egyutt_logo.png'); background-color:transparent; background-repeat:no-repeat;
+    height:32px; padding: 8px 5px 5px 34px;}
+ul.inline>li.tag-6 {background-image:url('../images/logo/fidesz_logo.png'); background-color:transparent; background-repeat:no-repeat;
+    height:32px; padding: 8px 5px 5px 34px;}
+ul.inline>li.tag-7 {background-image:url('../images/logo/kdnp_logo.png'); background-color:transparent; background-repeat:no-repeat;
+    height:32px; padding: 8px 5px 5px 34px;}
+ul.inline>li.tag-8 {background-image:url('../images/logo/jobbik_logo.png'); background-color:transparent; background-repeat:no-repeat;
+    height:32px; padding: 8px 5px 5px 34px;}
+ul.inline>li.tag-9 {background-image:url('../images/logo/dk_logo.png'); background-color:transparent; background-repeat:no-repeat;
+    height:32px; padding: 8px 5px 5px 34px;}
+ul.inline>li.tag-10 {background-image:url('../images/logo/liberalisok_logo.png'); background-color:transparent; background-repeat:no-repeat;
+    height:32px; padding: 8px 5px 5px 34px;}
+ul.inline>li.tag-11 {background-image:url('../images/logo/moma_logo.png'); background-color:transparent; background-repeat:no-repeat;
+    height:32px; padding: 8px 5px 5px 34px;}
+ul.inline>li.tag-12 {background-image:url('../images/logo/momentum_logo.png'); background-color:transparent; background-repeat:no-repeat;
+    height:32px; padding: 8px 5px 5px 34px;}
+ul.inline>li.tag-13 {background-image:url('../images/logo/vm_logo.png'); background-color:transparent; background-repeat:no-repeat;
+    height:32px; padding: 8px 5px 5px 34px;}
+ul.inline>li.tag-14 {background-image:url('../images/logo/fuggetlenek_logo.png'); background-color:transparent; background-repeat:no-repeat;
+    height:32px; padding: 8px 5px 5px 34px;}
+ul.inline>li.tag-15 {background-image:url('../images/logo/mszdp_logo.png'); background-color:transparent; background-repeat:no-repeat;
+    height:32px; padding: 8px 5px 5px 34px;}
+ul.inline>li.tag-16 {background-image:url('../images/logo/balpart_logo.png'); background-color:transparent; background-repeat:no-repeat;
+    height:32px; padding: 8px 5px 5px 80px; background-position:0px 4px}
+ul.inline>li.tag-17 {background-image:url('../images/logo/mkp_logo.png'); background-color:transparent; background-repeat:no-repeat;
+    height:32px; padding: 8px 5px 5px 34px;}
+ul.inline>li.tag-18 {background-image:url('../images/logo/eubalpart_logo.png'); background-color:transparent; background-repeat:no-repeat;
+    height:32px; padding: 8px 5px 5px 34px;}
+ul.inline>li.tag-19 {background-image:url('../images/logo/ketfarku_logo.png'); background-color:transparent; background-repeat:no-repeat;
+    height:32px; padding: 8px 5px 5px 42px;}
+
+/* két oszlopos elrendezés */	
+@media (min-width: 1200px)	{
+   #all {width:1100px;}
+   #contentarea2 {padding:10px 20px 10px 20px;}
+   #wrapper {width:780px; float:left}
+   #main {padding-right:10px;}
+   #content {min-height:300px;}
+   #right {width: 250px; display:block; float:left;}
+   .elovalasztok-gombok button {width:200px;}
+   #rightMobil {display:none}
+   #menuIcon {display:none}
+   #prefList label {width:550px}
+}
+/* két oszlopos elrendezés menu poup és oldalsó ikonok */
+@media (min-width: 560px) and (max-width: 1199px) {
+   #body {width:100%}	
+   #all {width:100%;}
+   #contentarea2 {padding:5px 5px 5px 5px;}
+   #wrapper {width:89%; float:left}
+   #main {padding-right:5px;}
+   #right {display:none; float:none; z-index:99; position:absolute; 
+      left:1px; top:10px; width:80%; border-style:solid; border-width:1px; background-color:white;}
+   #rightMobil {display:block; float:right; width:50px; margin:5px 10px 5px 5px;}	  
+   #rightMobil label {display:none}
+   .elovalasztok-gombok button {width:50px;}
+   #rightMobil .userInfo {display:none}
+   #rightMobil .moduletablecimkek {display:none}
+   #rightMobil .moduletablecookie {display:none}
+   #rightMobil .moduletablelogin {display:none}
+   .itp-sb-left {margin-left:20px;}
+   .share h3 {font-size:10px;}
+   #menuIcon {display:block; background-color:#B6C6C5; float:right; height:32px; width:20px; cursor:pointer; 
+      margin: -50px 10px; 0px 0px; padding:3px;}
+}
+/* egy oszlopos elrendezés csak menu popup */
+@media (max-width: 559px) {
+   #all {width:100%;}
+   #contentarea2 {padding:5px 5px 5px 5px;}
+   #wrapper {width:100%;}
+   #main {padding-right:5px;}
+   #right {display:none; float:none; z-index:99; position:absolute; 
+      left:1px; top:10px; width:80%; border-style:solid; border-width:1px; background-color:white;}
+   .elovalasztok-gombok button {width:auto;}
+   #rightMobil {display:none}	  
+   .share h3 {font-size:10px;}
+   #menuIcon {display:block; background-color:#B6C6C5; float:right; height:32px; width:20px; cursor:pointer; 
+      margin: -50px 10px; 0px 0px; padding:3px;}
+}
+
+
+
+	
+	

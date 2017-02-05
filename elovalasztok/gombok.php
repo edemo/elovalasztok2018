@@ -55,7 +55,10 @@ if ($user->id > 0) {
 
 ?>
 
-<div class="elovalasztok-gombok">
+<div id="elovalasztok-gombok" class="elovalasztok-gombok">
+  <center>
+  <div class="gombok1">
+  <div class="gombok2">
   <?php if ($user->id <= 0) : ?>
   <button id="loginBtn" type="button" title="Bejelentkezés" 
      onclick="open('<?php JURI::base(); ?>index.php?option=com_adalogin&redi=<?php echo base64url_encode(JURI::root()); ?>','ADA','width=370,height=600,left=100,top=100');">
@@ -73,7 +76,7 @@ if ($user->id > 0) {
   
   <?php 
     if (teheti($szavazas_id, $user, 'szavazas', $msg)) {
-		  $c = ' btn-primary'; $d = ''; $t = '';
+		  $c = ' btn-primary'; $d = ''; $t = 'Szavazás';
 	} else {
 		$c = ''; $d = ' disabled="disabled"';
 		$t = $msg;
@@ -82,19 +85,19 @@ if ($user->id > 0) {
 		}
 	}	
   ?>
-  <button <?php echo $d; ?> title="<?php echo $t; ?>"
+  <button <?php echo $d; ?> title="Szavazok"
     type="button" onclick="location='<?php echo JURI::root(); ?>component/jumi?fileid=4&task=szavazok&id=<?php echo $szavazas_id; ?>';">
 	<i class="icon-szavazok"> </i><label>Szavazok</label>
   </button><br />
   
   <?php 
     if (teheti($szavazas_id, $user, 'eredmeny', $msg)) {
-		$c = ' btn-primary'; $d = ''; $t = '';
+		$c = ' btn-primary'; $d = ''; $t = 'Eredmény';
 	} else {
 		$c = ''; $d = ' disabled="disabled"'; $t = 'jelenleg még nem nézhető meg az eredmény';
 	}	
   ?>
-  <button <?php echo $d; ?> title="<?php echo $t; ?>"
+  <button <?php echo $d; ?> title="Eredmény"
     type="button" onclick="location='<?php echo JURI::root(); ?>component/jumi?fileid=4&task=eredmeny&id=<?php echo $szavazas_id; ?>';">
     <i class="icon-eredmeny"> </i><label>Eredmény</label>
   </button><br />
@@ -106,10 +109,13 @@ if ($user->id > 0) {
   </button><br />
   <?php endif; ?>
   
-  <button title="választó kerületek"
+  <button title="választó kerületek" 
     type="button" onclick="location='<?php echo JURI::root(); ?>component/content/category?id=8';">
 	<i class="icon-oevk"> </i><label>Választó kerületek</label>
   </button>	
+  </div>
+  </div>
+  </center>
 </div>
   
   

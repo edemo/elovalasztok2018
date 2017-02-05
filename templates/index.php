@@ -104,7 +104,6 @@ require __DIR__ . '/jsstrings.php';
 		<center>
 		<div id="all">
 			<div id="back">
-			    
 				<header id="header">
 					<a href="index.php">
 					<div class="logoheader">
@@ -120,7 +119,7 @@ require __DIR__ . '/jsstrings.php';
 						<span class="header1">
 						<?php echo htmlspecialchars($this->params->get('sitedescription')); ?>
 						</span></h1>
-					</div>
+					</div><!-- end logoheader -->
 					</a>	
 					
 					<jdoc:include type="modules" name="position-1" />
@@ -128,8 +127,8 @@ require __DIR__ . '/jsstrings.php';
 						<div id="fontsize"></div>
 						<h3 class="unseen"><?php echo JText::_('TPL_BEEZ3_SEARCH'); ?></h3>
 						<jdoc:include type="modules" name="position-0" />
-					</div>
-				</header>
+					</div> <!-- end line -->
+				</header><!-- end header -->
 				
 				<div id="<?php echo $showRightColumn ? 'contentarea2' : 'contentarea'; ?>">
 					<div id="breadcrumbs">
@@ -144,9 +143,9 @@ require __DIR__ . '/jsstrings.php';
 							<jdoc:include type="modules" name="position-7" style="beezDivision" headerLevel="3" />
 							<jdoc:include type="modules" name="position-4" style="beezHide" headerLevel="3" state="0 " />
 							<jdoc:include type="modules" name="position-5" style="beezTabs" headerLevel="2"  id="3" />
-						</nav>
+						</nav><!-- end navi -->
 					<?php endif; ?>
-										
+
 					<div id="<?php echo $showRightColumn ? 'wrapper' : 'wrapper2'; ?>" <?php if (isset($showno)){echo 'class="shownocolumns"';}?>>
 						<div id="main">
 <?php if ($this->countModules('position-12')) : ?>
@@ -162,37 +161,60 @@ require __DIR__ . '/jsstrings.php';
 							<div class="alsoGombok">
 							<jdoc:include type="modules" name="position-4" />
 							</div>
-						</div>
-					</div>
-					
+						</div><!-- end main -->
+					</div><!-- end wrapper -->
+
 					<?php if ($showRightColumn) : ?>
-						<div id="right">
+						<aside id="right">
 							<h2 class="unseen"><?php echo JText::_('TPL_BEEZ3_ADDITIONAL_INFORMATION'); ?></h2>
 							<jdoc:include type="modules" name="position-6" style="beezDivision" headerLevel="3" />
 							<jdoc:include type="modules" name="position-8" style="beezDivision" headerLevel="3" />
 							<jdoc:include type="modules" name="position-3" style="beezDivision" headerLevel="3" />
-						</div>
+						</aside><!-- end right -->
 					<?php endif; ?>
-
+					
 					<div id="rightMobil">
-						<jdoc:include type="modules" name="position-8" />
+						<jdoc:include type="modules" name="position-8" style="beezDivision" headerLevel="3" />
 					</div>
-						
 
+					<?php if ($navposition == 'center' and $showleft) : ?>
+						<nav class="left <?php if ($showRightColumn == null) { echo 'leftbigger'; } ?>" id="nav" >
+
+							<jdoc:include type="modules" name="position-5" style="beezTabs" headerLevel="2"  id="3" />
+
+						</nav><!-- end navi -->
+					<?php endif; ?>
 					<div style="clear:both"></div>
 
-					<!-- div class="wrap"></div -->
-				</div> 
+					<div class="wrap"></div>
+				</div> <!-- end contentarea -->
 				<center>
 				  <a href="<?php echo JURI::base(); ?>index.php">Vissza a kezdő lapra</a>
 				</center>
-			</div>
-			
+			</div><!-- back -->
 			<div id="lablec">
 						<jdoc:include type="modules" name="position-7" />
 			</div>
+		</div><!-- all -->
+		<div id="footer-outer">
+			<?php if ($showbottom) : ?>
+				<div id="footer-inner" >
+
+					<div id="bottom">
+						<div class="box box1"> <jdoc:include type="modules" name="position-9" style="beezDivision" headerlevel="3" /></div>
+						<div class="box box2"> <jdoc:include type="modules" name="position-10" style="beezDivision" headerlevel="3" /></div>
+						<div class="box box3"> <jdoc:include type="modules" name="position-11" style="beezDivision" headerlevel="3" /></div>
+					</div>
+
+				</div>
+			<?php endif; ?>
+
+			<div id="footer-sub">
+				<footer id="footer">
+					<jdoc:include type="modules" name="position-14" />
+				</footer><!-- end footer -->
+			</div>
 		</div>
-		
 		</center>
 		<jdoc:include type="modules" name="debug" />
 	</body>

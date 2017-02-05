@@ -64,9 +64,6 @@ header a:active {color:white}
 
 .itp-socialbuttons-mod h4 {display:none}
 
-.alsoGombok br {display:none}
-.alsoGombok .elovalasztok-gombok button {width:auto; margin-right:10px;}
-
 #lablec {margin:0px; padding:20px 0px 0px 0px; background-color:#9C6F72; width:100%; font-size:100%;}
 #lablec a, #lablec a:hover {color:white;}
 
@@ -101,6 +98,12 @@ header a:active {color:white}
              background-image:url(../images/magyarorszag.png); background-repeat:no-repeat; background-position:8px 14px; 
              background-color:#B6C6C5;
              width:50px; height:50px; border-radius:25px}
+
+.alsogombok {text-align:center;}
+.alsoGombok br {display:none}
+.alsoGombok .elovalasztok-gombok button {width:auto; margin-right:20px;}
+.alsoGombok .elovalasztok-gombok button  i {background-color:transparent}
+.alsoGombok .elovalasztok-gombok button label {display:none;}
 
 			 
 #rightbar-w ul.nav {border-style:solid; border-width:1px; padding:0px; font-size:110%; background-color:#33AC4B}
@@ -239,10 +242,10 @@ ul.inline>li.tag-19 {background-image:url('../images/logo/ketfarku_logo.png'); b
 @media (min-width: 1200px)	{
    #all {width:1100px;}
    #contentarea2 {padding:10px 20px 10px 20px;}
-   #wrapper {width:780px; float:left}
+   #wrapper {width:780px; float:left; }
    #main {padding-right:10px;}
    #content {min-height:300px;}
-   #right {width: 250px; display:block; float:left;}
+   #right {float:left; width:auto}
    .elovalasztok-gombok button {width:200px;}
    #rightMobil {display:none}
    #menuIcon {display:none}
@@ -253,7 +256,7 @@ ul.inline>li.tag-19 {background-image:url('../images/logo/ketfarku_logo.png'); b
    #body {width:100%}	
    #all {width:100%;}
    #contentarea2 {padding:5px 5px 5px 5px;}
-   #wrapper {width:89%; float:left}
+   #wrapper {width:85%; float:left}
    #main {padding-right:5px;}
    #right {display:none; float:none; z-index:99; position:absolute; 
       left:1px; top:10px; width:80%; border-style:solid; border-width:1px; background-color:white;}
@@ -266,8 +269,9 @@ ul.inline>li.tag-19 {background-image:url('../images/logo/ketfarku_logo.png'); b
    #rightMobil .moduletablelogin {display:none}
    .itp-sb-left {margin-left:20px;}
    .share h3 {font-size:10px;}
-   #menuIcon {display:block; background-color:#B6C6C5; float:right; height:32px; width:20px; cursor:pointer; 
-      margin: -50px 10px; 0px 0px; padding:3px;}
+   /* #menuIcon {display:block; background-color:#B6C6C5; float:right; height:32px; width:20px; cursor:pointer; 
+      margin: -50px 10px; 0px 0px; padding:3px;} */
+   #menuIcon {display:none}
 }
 /* egy oszlopos elrendezés csak menu popup */
 @media (max-width: 559px) {

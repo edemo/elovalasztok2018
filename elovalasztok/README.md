@@ -1,12 +1,7 @@
 # elovalasztok2018
 Ez a 2018 -as előválasztásra készülő Joomla 3 alapú szoftver
-Telepitett teszt változat: https://elovalasztok.edemokraciagep.org
-
-Pilot projekt: Idöközi önkormányzati választás 2017.03.  Bp. XIV. 03. körzet
-
 
 A php fájlok joomla JUMI modulok vagy componensek
-
 
 A projekt jelenleg nem többnyelvű, a magyar szövegkonstansok fixen be vannak írva a kódokba
 

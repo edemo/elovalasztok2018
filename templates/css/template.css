@@ -27,7 +27,7 @@ body {
     font-size: 100.0%;
     padding: 0px;
     text-align: center;
-	background-image:url(../images/keyboard.jpg);
+	/* background-image:url(../images/keyboard.jpg); */
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
@@ -244,7 +244,7 @@ ul.inline>li.tag-19 {background-image:url('../images/logo/ketfarku_logo.png'); b
    #contentarea2 {padding:10px 20px 10px 20px;}
    #wrapper {width:780px; float:left; }
    #main {padding-right:10px;}
-   #content {min-height:300px;}
+   #content {min-height:400px;}
    #right {float:left; width:auto}
    .elovalasztok-gombok button {width:200px;}
    #rightMobil {display:none}

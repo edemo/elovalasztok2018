@@ -211,9 +211,7 @@ JHtml::addIncludePath(JPATH_COMPONENT . '/helpers');
 	$res = $db->loadObjectList();
 	echo '<div class="logok"><ul class="inline">';
 	foreach ($res as $res1) {
-		echo '<li class="tag-'.$res1->id.' tag-list0" itemprop="keywords">
-				<a href="/elovalasztok/component/tags/tag/'.$res1->id.'-'.$res1->title.'" class="label label-info">
-				'.$res1->title.'</a></li>';	
+		echo '<li class="tag-'.$res1->id.' tag-list0" itemprop="keywords">'.$res1->title.' </li>';	
 	}
 	echo '</ul></div>';
 ?>

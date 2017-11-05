@@ -40,12 +40,12 @@ $voksDarab = $res->cc;
 	</form>
 
 	<?php if ($voksDarab > 0) : ?>
-	<p><button type="button" onclick="infoClick()" id="infoBtn">+</button>
-		Kiértékelés részletei
 		<?php echo $report ?>
-	</p>
+		<p><button type="button" onclick="infoClick()" id="infoBtn">+</button>
+			Az eredmény részletei
+		</p>
 	<?php else : ?>
-      <div class="noVoksInfo">Nincsenek szavazatok ebben a szavazásban.</div>	
+		<div class="noVoksInfo">Nincsenek szavazatok ebben a szavazásban.</div>	
 	<?php endif; ?>
 	
 	<center><br />

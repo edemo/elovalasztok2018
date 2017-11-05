@@ -184,8 +184,6 @@ endif;
 	  echo $this->item->text; 
 	?>
 
-<?php // TAGS ?>
-<?php if ($params->get('show_tags', 1) && !empty($this->item->tags->itemTags)) : ?>
 	<?php
 		// cimkék ABC sorrendben
 		$db->setQuery('select t.id,t.title
@@ -193,17 +191,15 @@ endif;
 		where t.id = tm.tag_id and tm.content_item_id='.$db->quote($this->item->id).'
 		order by title');
 		$res = $db->loadObjectList();
-		echo '<ul class="inline">';
+		echo '<div class="logok">
+		<ul class="inline">';
 		foreach ($res as $res1) {
-			echo '<li class="tag-'.$res1->id.' tag-list0" itemprop="keywords">
-					<a href="/elovalasztok/component/tags/tag/'.$res1->id.'-'.$res1->title.'" class="label label-info">
-					'.$res1->title.'</a></li>';	
+			echo '<li class="tag-'.$res1->id.' tag-list0" itemprop="keywords">'.$res1->title.'</li>';	
 		}
-		echo '</ul>';
+		echo '</ul>
+		</div>
+		';
 	?>
-	
-	
-<?php endif; ?>
 
 <?php
 if (!empty($this->item->pagination) AND $this->item->pagination AND $this->item->paginationposition AND!$this->item->paginationrelative):

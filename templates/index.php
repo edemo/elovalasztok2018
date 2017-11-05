@@ -33,7 +33,6 @@ $config         = JFactory::getConfig();
 $bootstrap      = explode(',', $this->params->get('bootstrap'));
 $option         = JFactory::getApplication()->input->getCmd('option', '');
 
-
 function base64url_encode($data) { 
 	  return rtrim(strtr(base64_encode($data), '+/', '-_'), '='); 
 } 
@@ -41,11 +40,7 @@ function base64url_encode($data) {
 
 // Output as HTML5
 $this->setHtml5(true);
-
-JHtml::_('bootstrap.loadCss', true, $this->direction);
-
-$this->addStyleSheet($this->baseurl . '/templates/system/css/system.css');
-$this->addStyleSheet($this->baseurl . '/templates/' . $this->template . '/css/template.css', 'text/css', 'screen');
+// JHtml::_('bootstrap.framework');
 
 if ($color == 'image')
 {
@@ -61,18 +56,12 @@ if ($color == 'image')
 // Check for a custom CSS file
 $userCss = JPATH_SITE . '/templates/' . $this->template . '/css/user.css';
 
-if (file_exists($userCss) && filesize($userCss) > 0)
-{
-	$this->addStyleSheetVersion($this->baseurl . '/templates/' . $this->template . '/css/user.css');
-}
-
-JHtml::_('bootstrap.framework');
-$this->addScript($this->baseurl . '/templates/' . $this->template . '/javascript/md_stylechanger.js');
 $this->addScript($this->baseurl . '/templates/' . $this->template . '/javascript/hide.js');
 $this->addScript($this->baseurl . '/templates/' . $this->template . '/javascript/respond.src.js');
-$this->addScript($this->baseurl . '/templates/' . $this->template . '/javascript/template.js');
 
 require __DIR__ . '/jsstrings.php';
+$input = JFactory::getApplication()->input;
+
 ?>
 <!DOCTYPE html>
 <html lang="<?php echo $this->language; ?>" dir="<?php echo $this->direction; ?>">
@@ -83,7 +72,8 @@ require __DIR__ . '/jsstrings.php';
 		<jdoc:include type="head" />
 		<!--[if IE 7]><link href="<?php echo $this->baseurl; ?>/templates/<?php echo $this->template; ?>/css/ie7only.css" rel="stylesheet" /><![endif]-->
 		<!--[if lt IE 9]><script src="<?php echo JUri::root(true); ?>/media/jui/js/html5.js"></script><![endif]-->
- 		
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.1/jquery.min.js" type="text/javascript"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/jquery-ui.min.js" type="text/javascript"></script>		
 		<script type="text/javascript">
 		  /*
 		  jQuery(function() {
@@ -97,10 +87,21 @@ require __DIR__ . '/jsstrings.php';
 		  });
 		  */
 		</script>
-		<link href="<?php echo JURI::root(); ?>templates/elovalasztok/css/template.css" rel="stylesheet" />
+		
+		<!-- Barják Lászól javaslata  start -->
+		<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Bevan">
+		<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto Slab">
+		<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+		<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+		<!-- Barják Lászól javaslata  stop -->
+
+		<link href="<?php echo JURI::root(); ?>templates/elovalasztok-2/css/template.css" rel="stylesheet" />
 		
 	</head>
 	<body id="shadow">
+		<?php if (($input->get('option') == 'com_adalogin') & ($input->get('task') != 'dologout')) : ?>
+			<jdoc:include type="component" />
+		<?php else : ?>	
 		<center>
 		<div id="all">
 			<div id="back">
@@ -108,17 +109,8 @@ require __DIR__ . '/jsstrings.php';
 					<a href="index.php">
 					<div class="logoheader">
 						<h1 id="logo">
-						<?php if ($logo) : ?>
-							<img src="<?php echo $this->baseurl; ?>/<?php echo htmlspecialchars($logo); ?>"  alt="<?php echo htmlspecialchars($this->params->get('sitetitle')); ?>" />
-						<?php endif;?>
-						<?php if (!$logo AND $this->params->get('sitetitle')) : ?>
-							<?php echo htmlspecialchars($this->params->get('sitetitle')); ?>
-						<?php elseif (!$logo AND $config->get('sitename')) : ?>
-							<?php echo htmlspecialchars($config->get('sitename')); ?>
-						<?php endif; ?>
-						<span class="header1">
-						<?php echo htmlspecialchars($this->params->get('sitedescription')); ?>
-						</span></h1>
+						  <img src="images/banners/elovalasztok_head_720x210.png" />
+						</h1>
 					</div><!-- end logoheader -->
 					</a>	
 					
@@ -216,6 +208,7 @@ require __DIR__ . '/jsstrings.php';
 			</div>
 		</div>
 		</center>
+		<?php endif; // com_adalogin ? ?>
 		<jdoc:include type="modules" name="debug" />
 	</body>
 </html>

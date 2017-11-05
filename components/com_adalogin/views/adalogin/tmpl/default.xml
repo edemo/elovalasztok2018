@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<metadata>
+	<layout title="Adalogin">
+	</layout>
+	<state>
+	<name>Adalogin Layout</name>
+		<description>Adalogin Layout_DESC</description>	
+		<url addpath="/administrator/components/com_adalogin/elements">
+			<param name="redi" type="text" default="http://yourdomain/index.php" label="ADALOGIN_REDI" description="ADALOGIN_REDI_DESC" />
+		</url>
+		<params>
+		</params>
+	</state>
+	
+	<!-- Fields for Joomla > 1.5. -->
+	<fields name="request">
+		<fieldset name="request"
+			addfieldpath="/administrator/components/com_adalogin/models/fields"
+		>
+			<field name="redi"
+				type="text"
+				default="http://yourdomain/index.php"
+				description="ADALOGIN_REDI_DESC"
+				label="ADALOGIN_REDI"
+				required="true"
+			/>
+		</fieldset>
+	</fields>	
+	<!-- Add fields to the parameters object for the layout. -->
+	<fields name="params">
+	</fields>
+</metadata>

@@ -17,7 +17,7 @@
   
   /**
     * engedélyezett/nem egedélyezett az akció?
-	* @param integer oevk (jelenleg csak formai okokból, valójában nincs használva)
+	* @param integer oevk 
 	* @param Juser bejelentkezett user
 	* @param string $akcio 'jeloltAdd','jeloltEdit','jeloltDelete','szavazas','szavazatEdit','szavazatDelete','eredmeny'
 	* @param string $msg output parameter: tiltás oka pl: 'config'
@@ -28,10 +28,17 @@
 	$result = false;
 	$msg = '';
 	$fordulo = $config->fordulo;
+	$db = JFactory::getDBO();
+	$db->setQuery('select * from #__categories where id='.$db->quote($szavazas_id).' and published = 1');
+	$szavazas = $db->loadObject();
 	
 	// eredmény lekérdezés látogatónak is megengedett
+	// eredmény lekérdezés csak lezárt szavazásoknál megengedett
 	if ($akcio == 'eredmeny') {
-	   if ($evConfig->eredmeny) {
+	   if (strpos($szavazas->title,'(lezárt)') <= 0) {	
+		   $result = false;
+		   $msg='A szavazás még folyamatban van';
+	   } else if ($evConfig->eredmeny) {
 		   $result = true;
 		   $msg = '';	
 	   } else {
@@ -41,16 +48,13 @@
 	   return $result;
 	}
 	
-	// szavazás gomb legyen aktiv guestnek is (marketing)
-	if (($akcio == 'szavazas') & ($user->id == 0)) {
-	   if ($evConfig->szavazas) {
-		   $result = true;
-		   $msg = '';	
-	   } else {
+	// lezárt szavazás kezelése
+	if ($akcio == 'szavazas') {
+	   if (strpos($szavazas->title,'(lezárt)')) {	
 		   $result = false;
-		   $msg='config';
-	   }
-	   return $result;
+		   $msg = 'Lezárt szavazás';	
+		   return $result;
+	   }	   
 	}
 	
 	if ($user->id <= 0) {

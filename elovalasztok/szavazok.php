@@ -1,7 +1,7 @@
 <?php
 /**
   * szavazok component
-  *   taskok: szavazok, szavazatEdit, szavazatDelete, eredmeny, szavazatSave
+  *   taskok: szavazok, szavazatedit, szavazatDelete, eredmeny, szavazatSave
   * Licensz: GNU/GPL
   * Szerző: Fogler Tibor   tibor.fogler@gmail.com_addref
   * web: github.com/utopszkij/elovalasztok2018
@@ -244,6 +244,7 @@
 		$db->setQuery('select * from #__categories where id='.$db->quote($oevk));
 		$poll = $db->loadObject();
 		echo '<h2>'.$poll->title.'</h2>
+		<div class="pollLeiras">'.$poll->description.'</div>
 		';
 		$pollid = $oevk;
 		
@@ -269,7 +270,7 @@
 		  $cache->report = "";
 		}
 		
-		// test $cache->report = '';
+		$cache->report = '';
 		
 		if ($cache->report == "") {
 		  // ha nincs; most  kell condorcet/Shulze feldolgozás feldolgozás
@@ -330,6 +331,8 @@
 					       'Szavazat biztonsági kód:<strong>'.$secret.'</strong><br /><br />'.
 						   'Amennyiben böngészője tárolja a "cooki"-kat (sütiket); akkor 30 napon belül, ebből a böngészöből kezdeményezheti szavazata törlését<br />'.
                            'Ellenkező esetben, 30 nap után, illetve másik böngészőből a szavazat törléséhez a fenti biztonsági kód megadása szükséges.<br />';
+					// 2017.02.09 egyenlőre nem lesz szavazat törlési lehetőség
+					$msg = 'Köszönjük szavazatát.';	
 				    $msgClass = 'info';
 					$cookie_name = 'voks_'.$oevk;
 					$cookie_value = $secret;
@@ -419,6 +422,31 @@
 		   JControllerLegacy::setRedirect(JURI::root().'component/content/category?id=8');
 		   JControllerLegacy::redirect($msg, $msgClass);
 		}	
+	}
+
+	/** 
+	* már meglévő szavazat felülírása
+	*/
+    public function szavazatedit($oevk, $user, $filter) {
+		global $evConfig;
+
+		if (!isOevkSzavazas($oevk)) {
+			$this->setMessage('Hibás szavazás azonositó','error');
+			$this->setRedirect(JURI::root());
+			$this->redirect();
+		}
+
+		if ($user->id <= 0) {
+			// nincs bejelentkezve
+			if (isOevkSzavazas($oevk))
+				$url = JURI::root().'component/jumi?task=szavazok&id='.$oevk;
+			else
+				$url = JURI::root();
+			$this->setRedirect(JURI::base().'index.php?option=com_adalogin&redi='.$url);
+			$this->redirect();
+		}
+
+		$this->szavazok($oevk, $user, $filter);	
 	}
   }
   // ================= main program ===========================

@@ -27,8 +27,16 @@ $class = ' class="first"';
 				?>
                 <li<?php echo $class; ?>>
                         <?php $class = ''; ?>
-                        <span class="item-title"><a href="<?php echo JRoute::_(ContentHelperRoute::getCategoryRoute($child->id));?>">
-                                <?php echo $this->escape($child->title); ?></a>
+                        <span class="item-title">
+						   <?php if (mb_strpos($child->title, '(lezárt)') > 0 ) : ?>
+						   <a href="<?php echo JURI::root().'component/jumi?fileid=4&task=eredmeny&id='.$child->id; ?>">
+                                <?php echo $this->escape($child->title); ?>
+						   </a>
+						   <?php else : ?>
+						   <a href="<?php echo JRoute::_(ContentHelperRoute::getCategoryRoute($child->id));?>">
+                                <?php echo $this->escape($child->title); ?>
+						   </a>
+						   <?php endif; ?>
                         </span>
 
                        <?php if ($this->params->get('show_subcat_desc') == 1) :?>

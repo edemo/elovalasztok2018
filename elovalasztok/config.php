@@ -22,6 +22,7 @@ class EvConfig {
 	  for ($i=9; $i<=114; $i++) {
 		  $this->oevkSzavazasok[] = $i;
 	  }
+	$this->oevkSzavazasok[] = 131;
   }
   
   public function userAdmin($user) {

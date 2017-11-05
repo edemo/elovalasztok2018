@@ -22,7 +22,7 @@
   $user = JFactory::getUser();
   $msg = '';
   $input = JFactory::getApplication()->input;  
-
+  $task = $input->get('task');
   $szavazas_id = $input->get('szavazas_id',0);
   $id = $input->get('id',0);
   $option = $input->get('option');
@@ -57,6 +57,8 @@ if ($user->id > 0) {
 
 <div id="elovalasztok-gombok" class="elovalasztok-gombok">
   <center>
+	<p>Egy ember csak egy választókerületben és csak egyszer szavazhat. Viszont a szavazat módosítható.
+ Modosítás során a korábbitól eltérő választókörzetben is szavazhat, ez esetben a korábbi szavazat törlődik.</p>
   <div class="gombok1">
   <div class="gombok2">
   <?php if ($user->id <= 0) : ?>
@@ -74,29 +76,31 @@ if ($user->id > 0) {
     </button><br />
   <?php endif; ?>
   
-  <?php if (isOevkSzavazas($szavazas_id)) : ?>
+  <?php if (isOevkSzavazas($szavazas_id) & ($task != 'szavazasedit') & ($task != 'szavazok')) : ?>
 	  <?php if (teheti($szavazas_id, $user, 'szavazas', $msg)) : ?>
 		  <button id="szavazokBtn" title="Szavazok"
 			type="button" onclick="location='<?php echo JURI::root(); ?>component/jumi?fileid=4&task=szavazok&id=<?php echo $szavazas_id; ?>';">
 			<i class="icon-szavazok"> </i><label>Szavazok</label>
 		  </button><br />
 	  <?php else : ?>
-		 <?php if ($msg == '__Ön már szavazott') : ?>
+		 <?php if ($msg == 'Ön már szavazott') : ?>
 		  <button id="szavazokBtn" title="Szavazok"
 			type="button" onclick="location='<?php echo JURI::root(); ?>component/jumi?fileid=4&task=szavazatedit&id=<?php echo $szavazas_id; ?>';">
 			<i class="icon-szavazok"> </i><label>Szavazat módosítása</label>
 		  </button><br />
-
 		 <?php else : ?>
 		  <div class="nemszavazhat">
 			<i class="icon-nemszavazhat"> </i>
 			<label><?php echo $msg; ?></label>
 		  </div><br />
+		  <?php if(holSzavazott($szavazas_id, $user) != '') : ?>
+			<p><?php echo holSzavazott($szavazas_id, $user); ?></p>
+		  <?php endif; ?>		
 		 <?php endif; ?>
 	  <?php endif; ?>
   <?php endif; ?>
   
-  <?php if (teheti($szavazas_id, $user, 'eredmeny')) : ?>
+  <?php if (teheti($szavazas_id, $user, 'eredmeny',$msg)) : ?>
   <button id="eredmenyBtn" <?php echo $d; ?> title="Eredmény"
     type="button" onclick="location='<?php echo JURI::root(); ?>component/jumi?fileid=4&task=eredmeny&id=<?php echo $szavazas_id; ?>';">
     <i class="icon-eredmeny"> </i><label>Eredmény</label>

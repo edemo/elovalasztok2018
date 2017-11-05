@@ -1,13 +1,13 @@
 <?php
 defined('_JEXEC') or die;
 
-// elõválasztok rendszer globális konstansok, funkciók, objektumok
+// elÃµvÃ¡lasztok rendszer globÃ¡lis konstansok, funkciÃ³k, objektumok
 
 include_once dirname(__FILE__).'/config.php';
 
 
 /**
-* szavazás tipus check $szavazas_id egy adott tipusú szavazás azonositó?
+* szavazÃ¡s tipus check $szavazas_id egy adott tipusÃº szavazÃ¡s azonositÃ³?
 * @param integer $szavazas.ID
 * @return boolean
 */
@@ -24,7 +24,7 @@ function isOevkSzavazas($szavazas_id) {
 }
 function isOrszagosListaSzavazas($szavazas_id) {
 	global $evConfig;
-	return in_array($szavazas_id, $evConfig->OrszagosListaSzavazasok);
+	return in_array($szavazas_id, $evConfig->orszagosListaSzavazasok);
 }
 function isMiniszterelnokSzavazas($szavazas_id) {
 	global $evConfig;
@@ -32,9 +32,9 @@ function isMiniszterelnokSzavazas($szavazas_id) {
 }
 
 /**
-* oevk kód megállapítása a jelölt.ID -bõl
+* oevk kÃ³d megÃ¡llapÃ­tÃ¡sa a jelÃ¶lt.ID -bÃµl
 * @param integer jelolt.ID
-* @return integer  (0 ha nem sikerült oevk-t megállapítani)
+* @return integer  (0 ha nem sikerÃ¼lt oevk-t megÃ¡llapÃ­tani)
 */
 function oevkFromJelolt($jelolt_id) {
 	$result = 0;
@@ -49,9 +49,9 @@ function oevkFromJelolt($jelolt_id) {
 }
 
 /**
-* oevk kód megállapítása a User adatokból
+* oevk kÃ³d megÃ¡llapÃ­tÃ¡sa a User adatokbÃ³l
 * @param JUser
-* @return integer  (0 ha nem sikerült oevk-t megállapítani)
+* @return integer  (0 ha nem sikerÃ¼lt oevk-t megÃ¡llapÃ­tani)
 */
 function oevkFromUser($user) {
 	$result = 0;
@@ -70,7 +70,7 @@ function oevkFromUser($user) {
 	return $result;
 }
 
-/** user rang megállapítása
+/** user rang megÃ¡llapÃ­tÃ¡sa
 * @param JUser
 * @return boolean
 */
@@ -80,8 +80,8 @@ function isElovalasztokAdmin($user) {
 } 
 
 /**
-    * adott user, már szavazott?
-	* ha nincs bejelentkezve akkor false az eredménye
+    * adott user, mÃ¡r szavazott?
+	* ha nincs bejelentkezve akkor false az eredmÃ©nye
 	* @param integer $szavazas_id 
 	* @param JUser $user
 	* @param integer $fordulo
@@ -92,10 +92,19 @@ function isElovalasztokAdmin($user) {
 	  $db = JFactory::getDBO();
 	  $result = false;
 	  if ($user->id > 0) {
-		if (isOEVKszavazas($szavazas_id)) {  
-	      $db->setQuery('select * from #__szavazatok 
-		  where user_id='.$db->quote($user->id).' and fordulo = '.$db->quote($fordulo).'
-		  and szavazas_id = '.$db->quote($szavazas_id));
+		if (isOEVKszavazas($szavazas_id)) { 
+		  // meghatÃ¡rozom a szavazÃ¡s kategoria id-t
+		  $db->setQuery('select * from #__categories where id='.$db->quote($szavazas_id));
+		  $res = $db->loadObject();
+		  if ($res)
+			$catid = $res->parent_id;
+		  else
+			$catid = 0;
+ 
+	      $db->setQuery('select * 
+			from #__szavazatok sz, #__categories c
+			where sz.szavazas_id = c.id and user_id='.$db->quote($user->id).' and 
+			fordulo = '.$db->quote($fordulo).' and c.parent_id = '.$db->quote($catid));
 	      $res = $db->loadObjectList();
 	      $result = (count($res) >= 1);
 		}
@@ -108,6 +117,19 @@ function isElovalasztokAdmin($user) {
 		$result = false;  
 	  }	
 	  return $result;
+ }
+
+ /**
+ * a bejelentkezett user melyik oevk -ban adott le mÃ¡r szavazatot?
+ * a szavazas_id alapjÃ¡n meghatÃ¡rozzuk a felsÅ‘bb szintÅ± kategoriÃ¡t (pld orszÃ¡gos evk szavazÃ¡s)
+ * szavazas -> CATID
+ * ezutÃ¡n olyan szavazatokat keresÃ¼nk amik ez alÃ¡ tartozÃ³ szavazÃ¡sra vonatkoznak
+ * ha nincs ilyen akkor ''-t ad vissza, ha van akkor a megtalÃ¡lt
+ * szavazÃ¡s kategoriÃ¡jÃ¡nak a nevÃ©t
+ * szavzat-szavazas where userid= USERID and catid = CATID
+ */	
+ function holSzavazott($szavazas_id, $user, $fordulo=0) {
+ 	return '';
  }
 
 
@@ -137,7 +159,7 @@ function szavazasraJogosult($user, $szavazas_id, $assurance='') {
    if ($szavazas_id == $evConfig->probaSzavazas) return true;
    $db = JFactory::getDBO();
    if ($assurance == '') { 
-	   if (isBelsoSzavazas($szavazas_id)) $assurance = 'választóimozgalom';
+	   if (isBelsoSzavazas($szavazas_id)) $assurance = 'vÃ¡lasztÃ³imozgalom';
 	   if (isOEVKSzavazas($szavazas_id)) {
 		   $db->setQuery('select title from #__categories where id='.$db->quote($szavazas_id));
 		   $res = $db->loadObject();
@@ -159,12 +181,12 @@ function szavazasraJogosult($user, $szavazas_id, $assurance='') {
    return $db->loadObject()->cc > 0;
 }
 
-// hány szavazásra jogosult van az adott szavazásban?
+// hÃ¡ny szavazÃ¡sra jogosult van az adott szavazÃ¡sban?
 function szavazokSzama($szavazas_id, $assurance='') {
 	global $evConfig;
    $db = JFactory::getDBO();
    if ($assurance == '') {
-	   if (isBelsoSzavazas($szavazas_id)) $assurance = 'választóimozgalom';
+	   if (isBelsoSzavazas($szavazas_id)) $assurance = 'vÃ¡lasztÃ³imozgalom';
 	   if (isOEVKSzavazas($szavazas_id)) {
 		   $db->setQuery('select title from #__categories where id='.$db->quote($szavazas_id));
 		   $res = $db->loadObject();
@@ -181,11 +203,11 @@ function szavazokSzama($szavazas_id, $assurance='') {
    return $res->cc;
 }
 
-// debian alkotmány szerinti szükséges javaslat
+// debian alkotmÃ¡ny szerinti szÃ¼ksÃ©ges javaslat
 function getSzuksegesJavaslat($szavazas_id,$assurance='') {
 	global $evConfig;
    if ($assurance == '') {
-	   if (isBelsoSzavazas($szavazas_id)) $assurance = 'választóimozgalom';
+	   if (isBelsoSzavazas($szavazas_id)) $assurance = 'vÃ¡lasztÃ³imozgalom';
 	   if (isOEVKSzavazas($szavazas_id)) {
 		   $db->setQuery('select title from &__categories where id='.$db->quote($szavazas_id));
 		   $res = $db->loadObject();

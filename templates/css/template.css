@@ -178,7 +178,7 @@ a.impresszumLink:hover {color:black; text-decoration:underline}
 #alternativak .javaslat {background-color:#d0d0d0}
 #alternativak .alternativa {background-color:transparent}
 #alternativak .javaslatControl {text-align:right; padding:2px;}
-.items-leading img {max-width:25%}
+.items-leading img {max-width:25%; margin:5px; float:left}
 .item-title {font-size:150%}
 .jcomments-links {display:none}
 
@@ -228,41 +228,43 @@ li.tag-list0 {list-style:none; display:inline-block; width:auto; margin:1px;}
 li.tag-list0 a.label {color:white; margin-left:1px;}
 ul.inline>li a.label {background-image:none; background-color:transparent; border-style:none; color:white;}
 ul.inline>li.tag-2 {background-image:url('../images/logo/mszp_logo.png'); background-color:transparent; background-repeat:no-repeat;
-    height:32px; padding: 8px 5px 5px 34px;}
+    height:32px; padding: 8px 5px 5px 38px;}
 ul.inline>li.tag-3 {background-image:url('../images/logo/lmp_logo.png'); background-color:transparent; background-repeat:no-repeat;
-    height:32px; padding: 8px 5px 5px 34px;}
+    height:32px; padding: 8px 5px 5px 38px;}
 ul.inline>li.tag-4 {background-image:url('../images/logo/parbeszed_logo.png'); background-color:transparent; background-repeat:no-repeat;
-    height:32px; padding: 8px 5px 5px 34px;}
+    height:32px; padding: 8px 5px 5px 38px;}
 ul.inline>li.tag-5 {background-image:url('../images/logo/egyutt_logo.png'); background-color:transparent; background-repeat:no-repeat;
-    height:32px; padding: 8px 5px 5px 34px;}
+    height:32px; padding: 8px 5px 5px 38px;}
 ul.inline>li.tag-6 {background-image:url('../images/logo/fidesz_logo.png'); background-color:transparent; background-repeat:no-repeat;
-    height:32px; padding: 8px 5px 5px 34px;}
+    height:32px; padding: 8px 5px 5px 38px;}
 ul.inline>li.tag-7 {background-image:url('../images/logo/kdnp_logo.png'); background-color:transparent; background-repeat:no-repeat;
-    height:32px; padding: 8px 5px 5px 34px;}
+    height:32px; padding: 8px 5px 5px 38px;}
 ul.inline>li.tag-8 {background-image:url('../images/logo/jobbik_logo.png'); background-color:transparent; background-repeat:no-repeat;
-    height:32px; padding: 8px 5px 5px 34px;}
+    height:32px; padding: 8px 5px 5px 38px;}
 ul.inline>li.tag-9 {background-image:url('../images/logo/dk_logo.png'); background-color:transparent; background-repeat:no-repeat;
-    height:32px; padding: 8px 5px 5px 34px;}
+    height:32px; padding: 8px 5px 5px 38px;}
 ul.inline>li.tag-10 {background-image:url('../images/logo/liberalisok_logo.png'); background-color:transparent; background-repeat:no-repeat;
-    height:32px; padding: 8px 5px 5px 34px;}
+    height:32px; padding: 8px 5px 5px 38px;}
 ul.inline>li.tag-11 {background-image:url('../images/logo/moma_logo.png'); background-color:transparent; background-repeat:no-repeat;
-    height:32px; padding: 8px 5px 5px 34px;}
+    height:32px; padding: 8px 5px 5px 38px;}
 ul.inline>li.tag-12 {background-image:url('../images/logo/momentum_logo.png'); background-color:transparent; background-repeat:no-repeat;
-    height:32px; padding: 8px 5px 5px 34px;}
+    height:32px; padding: 8px 5px 5px 38px;}
 ul.inline>li.tag-13 {background-image:url('../images/logo/vm_logo.png'); background-color:transparent; background-repeat:no-repeat;
-    height:32px; padding: 8px 5px 5px 34px;}
+    height:32px; padding: 8px 5px 5px 38px;}
 ul.inline>li.tag-14 {background-image:url('../images/logo/fuggetlenek_logo.png'); background-color:transparent; background-repeat:no-repeat;
-    height:32px; padding: 8px 5px 5px 34px;}
+    height:32px; padding: 8px 5px 5px 38px;}
 ul.inline>li.tag-15 {background-image:url('../images/logo/mszdp_logo.png'); background-color:transparent; background-repeat:no-repeat;
-    height:32px; padding: 8px 5px 5px 34px;}
+    height:32px; padding: 8px 5px 5px 38px;}
 ul.inline>li.tag-16 {background-image:url('../images/logo/balpart_logo.png'); background-color:transparent; background-repeat:no-repeat;
     height:32px; padding: 8px 5px 5px 80px; background-position:0px 4px}
 ul.inline>li.tag-17 {background-image:url('../images/logo/mkp_logo.png'); background-color:transparent; background-repeat:no-repeat;
-    height:32px; padding: 8px 5px 5px 34px;}
+    height:32px; padding: 8px 5px 5px 38px;}
 ul.inline>li.tag-18 {background-image:url('../images/logo/eubalpart_logo.png'); background-color:transparent; background-repeat:no-repeat;
-    height:32px; padding: 8px 5px 5px 34px;}
+    height:32px; padding: 8px 5px 5px 38px;}
 ul.inline>li.tag-19 {background-image:url('../images/logo/ketfarku_logo.png'); background-color:transparent; background-repeat:no-repeat;
-    height:32px; padding: 8px 5px 5px 42px;}
+    height:32px; padding: 8px 5px 5px 46px;}
+ul.inline>li.tag-20 {background-image:url('../images/logo/kalozpart_logo.png'); background-color:transparent; background-repeat:no-repeat;
+    height:32px; padding: 8px 5px 5px 38px;}
 
 /* eredmeny */
 .pollResult {width:100%}
@@ -274,7 +276,7 @@ ul.inline>li.tag-19 {background-image:url('../images/logo/ketfarku_logo.png'); b
 #eredmenyInfo .right {padding:2px 5px 2px 5px; text-align:center}
 #eredmenyInfo .red {background-color:#E0c0c0; color:black;}
 #eredmenyInfo .green {background-color:#c0e0c0; color:black;}
-#eredmenyInfo .white {background-color:#ffffff}
+#eredmenyInfo .white {background-color:#ffffff; color:black;}
 .pollLeiras {margin-left:50px; text-decoration:italic}
 
 /* reszponziv elrendezesek*/

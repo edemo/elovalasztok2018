@@ -10,7 +10,7 @@
   * JRequest: oevk, task
   */
 defined('_JEXEC') or die;
-include_once JPATH_SITE.'/elovalasztok/accescontrol.php';  
+include_once JPATH_SITE.'/elovalasztok/accesscontrol.php';  
 include_once JPATH_SITE.'/elovalasztok/funkciok.php';  
   
 class szavazokModel {
@@ -153,7 +153,7 @@ class szavazokModel {
 		}
 		$db = JFactory::getDBO();
 		$db->setQuery('START TRANSACTION');
-		$db->queery();
+		$db->query();
 		
 		// ada hitelesitési szint
 		$ada0 = 0;
@@ -164,6 +164,13 @@ class szavazokModel {
 		if (strpos($user->params,'hash') > 0) $ada1 = 1; // ADA személyes adatok alapján
 		if (strpos($user->params,'email') > 0) $ada2 = 1; // ADA email aktiválás
 		if (strpos($user->params,'magyar') > 0) $ada3 = 1; // ADA személyesen ellenörzött
+		// szavazás kategoria megállapitása
+		$db->setQuery('select * from #__categories where id='.$db->quote($szavazas_id));
+		$res = $db->loadObject();
+		if ($res)
+			$catid = $res->parent_id;
+		else
+			$catid = 0;
 		// string részekre bontása és tárolás ciklusban
 		$w1 = explode(',',$szavazat);
 		foreach ($w1 as $item) {
@@ -179,7 +186,7 @@ class szavazokModel {
 				`fordulo`,`secret`
 				)
 				VALUES
-				(8, 
+				('.$db->quote($catid).', 
 				'.$db->quote($szavazas_id).', 
 				'.$db->quote($user->id).', 
 				'.$db->quote($user->id).', 
@@ -198,7 +205,7 @@ class szavazokModel {
 				$result = false;
 			}	
 		}
-		
+
 		// delete cached report
 		$db->setQuery('UPDATE #__eredmeny 
 		SET report="" 
@@ -213,25 +220,32 @@ class szavazokModel {
 			$db->setQuery('COMMIT');
 		else
 			$db->setQuery('ROLLBACK');
-		$db->queery();
+		$db->query();
 
 		return $result;
 	}	
 	
 	/**
 	* biztonságos törlés: s
-	* 1. update szavazat_id =0 - ezt az egy modositást engedi meg a trigger (ha a megfelelõ secret van megadva)
-	* 2. fizikai törlés - a trigger csk szavazat_id=0 -t enged törölni
+	* 1. update szavazat_id =0 - ezt az egy modositást engedi meg a trigger 
+	* 2. fizikai törlés - a trigger csak szavazat_id=0 -t enged törölni
 	*/
-	public function szavazatDelete($szavazas_id, $user, $fordulo, $secret) {
+	public function szavazatDelete($szavazas_id, $user, $fordulo, $secret = 0) {
 		$result = true;
 		$db = JFactory::getDBO();
 		$db->setQuery('START TRANSACTION');
+		if ($secret == 0) {
+			$db->setQuery('select * from #__szavazatok where user_id='.$db->quote($user->id));
+			$res = $db->loadObjectList();
+			if (count($res) > 0) {
+				$secret = $res[0]->secret;
+			}
+		}
 		$db->queery();
 		try {
 			$db->setQuery('update #__szavazatok 
 			set szavazas_id=0, user_id = 0, secret='.$secret.'
-			where user_id='.$db->quote($user->id).' and fordulo='.$db->quote($fordulo).' and szavazas_id='.$db->quote($szavazas_id));
+			where user_id='.$db->quote($user->id).' and fordulo='.$db->quote($fordulo));
 			$result = $db->query();
 		} catch (Exception $e) {
 			$result = false;

@@ -455,7 +455,7 @@ function okClick() {
 				s += ',';
 		  }
 		  row = rows[i];
-		  s += row.getElementsByTagName("td")[0].id.substr(6,10)+'='+row.getElementsByTagName("select")[0].selectedIndex + 1;
+		  s += row.getElementsByTagName("td")[0].id.substr(6,10)+'='+(row.getElementsByTagName("select")[0].selectedIndex + 1);
 		  i++;
 		}
 		document.forms.szavazatForm.szavazat.value = s;

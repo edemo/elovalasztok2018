@@ -36,10 +36,10 @@
 	// eredmény lekérdezés csak lezárt szavazásoknál megengedett
 	if ($akcio == 'eredmeny') {
 	   //if (strpos($szavazas->title,'(lezárt)') <= 0) {	
-		//   $result = false;
-		//   $msg='A szavazás még folyamatban van';
-	   // } else 
-	   if ($evConfig->eredmeny) {
+		 //  $result = false;
+		 //  $msg='A szavazás még folyamatban van';
+	   //} else 
+		if ($evConfig->eredmeny) {
 		   $result = true;
 		   $msg = '';	
 	   } else {

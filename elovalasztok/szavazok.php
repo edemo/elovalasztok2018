@@ -198,7 +198,7 @@
 				  $cookie_value = '';
 				  setcookie($cookie_name, $cookie_value, time() + (86400 * 30), "/"); // 86400 = 1 day					
 			  } else {
-				  $msg = 'Hiba a szavazat törlés közben, a szavazat nem lett törölve (lehet, hogy hibás biztonsági kulcsot adott meg)';
+				  $msg = 'Hiba a szavazat törlés közben, a szavazat nem lett törölve';
 				  $msgClass = 'error';
 			  }
 		      JControllerLegacy::setMessage($msg,$msgClass);
@@ -445,8 +445,14 @@
 			$this->setRedirect(JURI::base().'index.php?option=com_adalogin&redi='.$url);
 			$this->redirect();
 		}
-
-		$this->szavazok($oevk, $user, $filter);	
+	    $model = new szavazokModel();
+	    if ($model->szavazatDelete($oevk, $user, $evConfig->fordulo, 0)) {
+			$this->szavazok($oevk, $user, $filter);	
+		} else {
+			$this->setMessage('Hiba történt a korábbi szavazat törlése közben','error');
+			$this->setRedirect(JURI::root());
+			$this->redirect();
+		}
 	}
   }
   // ================= main program ===========================

@@ -117,17 +117,18 @@
 		   $msg='config';
 	   }
 	} else if ($akcio == 'szavazas') {
+	   // oevk szavazásokban megengedett a szavazat felülirás (újra szavazás) máshol nem
 	   if ($evConfig->szavazas) {
-		  if (szavazottMar($szavazas_id, $user, $fordulo)) {
+		  if (szavazottMar($szavazas_id, $user, $fordulo) & (!isOevkSzavazas($szavazas_id))) {
 			  $result = false;
 			  $msg = 'Ön már szavazott';
 		  }  else {
 			  if (szavazasraJogosult($user, $szavazas_id, '')) {
-			    $result = true;
-			    $msg = '';
+				$result = true;
+				$msg = '';
 			  } else {
-			    $result = false;
-			    $msg = 'Ön ebben a szavazásban nem szavazhat';
+				$result = false;
+				$msg = 'Ön ebben a szavazásban nem szavazhat';
 			  }	
 		  } 
 	   } else {
@@ -136,7 +137,7 @@
 	   }
 	} else if ($akcio == 'szavazatEdit') {
 	   if ($evConfig->szavazatEdit) {
-		  if (szavazottMar($szavazas_id, $use, $fordulo)) {
+		  if (szavazottMar($szavazas_id, $user, $fordulo)) {
 			  $result = true;
 			  $msg = '';
 		  }  else {

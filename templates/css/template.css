@@ -132,7 +132,7 @@ dd.info {display:block; background-color:#c0efc0; margin:5px; padding:10px;
   border-style:solid; border-width:1px; border-radius:4px;
   padding:4px 12px 4px 12px; margin:10px 0px 0px 0px; cursor:default}
 #elovalasztok-gombok .nemszavazhat label {padding:0px; margin:0px; cursor:default}  
-
+#szavazott_info {background-color:#d0d0d0; color:black; text-align:left; padding-left:10px; margin-bottom:5px;}
 
 #lablec a {display:inline-block; width:auto; height:auto;}	  
 .alsoGombok {text-align:center; padding:20px 0px 0px 0px;
@@ -178,6 +178,7 @@ a.impresszumLink:hover {color:black; text-decoration:underline}
 #alternativak .javaslat {background-color:#d0d0d0}
 #alternativak .alternativa {background-color:transparent}
 #alternativak .javaslatControl {text-align:right; padding:2px;}
+.items-leading {border-style:solid; border-width:2px 0px 0px 0px; margin:2px 0px 2px 0px}
 .items-leading img {max-width:25%; margin:5px; float:left}
 .item-title {font-size:150%}
 .jcomments-links {display:none}

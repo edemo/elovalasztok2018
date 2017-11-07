@@ -46,18 +46,20 @@ if ($user->id > 0) {
 	//<p><img src="'.JURI::root().'media/system/images/notice-info.png" />
 	//<var>Bejelentkezve</var></p>
 	//';
-	if (szavazottMar($szavazas_id, $user)) {
-		  echo '<p class="szavazottMar">Ön már szavazott ebben a szavazásban.</p>';
+	$marSzavazott = holSzavazott($szavazas_id, $user); 
+	if ($marSzavazott != '') {
+		echo '<div id="szavazott_info">
+		'.$marSzavazott.'
+		</div>
+		'; 
 	}
-	echo '</div>
-	';
 }
 
 ?>
 
 <div id="elovalasztok-gombok" class="elovalasztok-gombok">
   <center>
-	<p>Egy ember csak egy választókerületben és csak egyszer szavazhat. Viszont a szavazat módosítható.
+	<p class="category-desc">Egy ember csak egy választókerületben és csak egyszer szavazhat. Viszont a szavazat módosítható.
  Modosítás során a korábbitól eltérő választókörzetben is szavazhat, ez esetben a korábbi szavazat törlődik.</p>
   <div class="gombok1">
   <div class="gombok2">
@@ -77,13 +79,13 @@ if ($user->id > 0) {
   <?php endif; ?>
   
   <?php if (isOevkSzavazas($szavazas_id) & ($task != 'szavazasedit') & ($task != 'szavazok')) : ?>
-	  <?php if (teheti($szavazas_id, $user, 'szavazas', $msg)) : ?>
+	  <?php if (teheti($szavazas_id, $user, 'szavazas', $msg) & ($marSzavazott == '')) : ?>
 		  <button id="szavazokBtn" title="Szavazok"
 			type="button" onclick="location='<?php echo JURI::root(); ?>component/jumi?fileid=4&task=szavazok&id=<?php echo $szavazas_id; ?>';">
 			<i class="icon-szavazok"> </i><label>Szavazok</label>
 		  </button><br />
 	  <?php else : ?>
-		 <?php if ($msg == 'Ön már szavazott') : ?>
+		 <?php if ($marSzavazott != '') : ?>
 		  <button id="szavazokBtn" title="Szavazok"
 			type="button" onclick="location='<?php echo JURI::root(); ?>component/jumi?fileid=4&task=szavazatedit&id=<?php echo $szavazas_id; ?>';">
 			<i class="icon-szavazok"> </i><label>Szavazat módosítása</label>
@@ -93,9 +95,6 @@ if ($user->id > 0) {
 			<i class="icon-nemszavazhat"> </i>
 			<label><?php echo $msg; ?></label>
 		  </div><br />
-		  <?php if(holSzavazott($szavazas_id, $user) != '') : ?>
-			<p><?php echo holSzavazott($szavazas_id, $user); ?></p>
-		  <?php endif; ?>		
 		 <?php endif; ?>
 	  <?php endif; ?>
   <?php endif; ?>

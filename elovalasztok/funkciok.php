@@ -103,8 +103,10 @@ function isElovalasztokAdmin($user) {
  
 	      $db->setQuery('select * 
 			from #__szavazatok sz, #__categories c
-			where sz.szavazas_id = c.id and user_id='.$db->quote($user->id).' and 
-			fordulo = '.$db->quote($fordulo).' and c.parent_id = '.$db->quote($catid));
+			where sz.szavazas_id = c.id and 
+			sz.user_id='.$db->quote($user->id).' and 
+			fordulo = '.$db->quote($fordulo).' and 
+			c.parent_id = '.$db->quote($catid));
 	      $res = $db->loadObjectList();
 	      $result = (count($res) >= 1);
 		}
@@ -120,16 +122,70 @@ function isElovalasztokAdmin($user) {
  }
 
  /**
- * a bejelentkezett user melyik oevk -ban adott le már szavazatot?
+ * a bejelentkezett user melyik oevk -ban adott le már szavazatot, és milyent?
  * a szavazas_id alapján meghatározzuk a felsőbb szintű kategoriát (pld országos evk szavazás)
  * szavazas -> CATID
  * ezután olyan szavazatokat keresünk amik ez alá tartozó szavazásra vonatkoznak
  * ha nincs ilyen akkor ''-t ad vissza, ha van akkor a megtalált
- * szavazás kategoriájának a nevét
+ * szavazás kategoriájának a nevét és a leadott sorrendet (html)
  * szavzat-szavazas where userid= USERID and catid = CATID
+ * @param integer szavazas_id
+ * @param JUser bejelentkezett user rekord
+ * @param integer forduló def.0
+ * @return string html
  */	
  function holSzavazott($szavazas_id, $user, $fordulo=0) {
- 	return '';
+ 	$result = '';
+	$defCatid = 8; // oevk szavazások
+	if ($szavazas_id == $evConfig->probaSzavazas) return $result;
+	$db = JFactory::getDBO();
+	if ($user->id > 0) {
+		  // meghatározom a szavazás kategoria id-t
+		  $db->setQuery('select * from #__categories where id='.$db->quote($szavazas_id));
+		  $res = $db->loadObject();
+		  if ($res)
+			$catid = $res->parent_id;
+		  else
+			$catid = $defCatid;
+		  if ($catid == 0) $catid = $defCatid;
+
+		  // beolvasom a leadott szavazat rekordjait 
+	      $db->setQuery('select c.title szavazas, sz.pozicio, a.title jelolt 
+			from #__szavazatok sz, #__categories c, #__content a
+			where sz.szavazas_id = c.id and sz.alternativa_id = a.id and 
+			sz.user_id='.$db->quote($user->id).' and 
+			fordulo = '.$db->quote($fordulo).' and 
+			c.parent_id = '.$db->quote($catid).'
+			order by pozicio');
+	      $res = $db->loadObjectList();
+		  if (count($res) == 0) {
+			// most egyenlőre a catid=8 országgyülési választással foglalkozunk...	
+	      	$db->setQuery('select c.title szavazas, sz.pozicio, a.title jelolt 
+			from #__szavazatok sz, #__categories c, #__content a
+			where sz.szavazas_id = c.id and sz.alternativa_id = a.id and 
+			sz.user_id='.$db->quote($user->id).' and 
+			fordulo = '.$db->quote($fordulo).' and 
+			c.parent_id = 8
+			order by pozicio');
+			$res = $db->loadObjectList();
+		  }
+	
+		  if (count($res) > 0) {
+			$result = '
+			Ön már szavazott a <strong>'.$res[0]->szavazas.'</strong> szavazásban&nbsp; 
+		    <input id="szavazott-toggle" class="toggle" type="checkbox" />
+			<label class="hider" for="szavazott-toggle">több...</label>
+			<label class="shower" for="szavazott-toggle">kevesebb...</label>
+			<div class="additional-content" for="szavazott-toggle">';
+			foreach ($res as $res1) {
+			   $result .= '<p>'.$res1->pozicio.'. '.$res1->jelolt.'</p>
+			   ';
+			}
+			$result .= '</div>
+			';
+		  }
+	}
+	return $result;
  }
 
 

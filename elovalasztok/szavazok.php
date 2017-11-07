@@ -64,8 +64,8 @@
 			$this->setRedirect(JURI::root().'component/content/category?id=8');
 			$this->redirect();
 		} else  {
-		   if (szavazottMar($oevk, $user)) {
-			  $this->setMessage('Ön már szavaztott!','error');
+		   if (szavazottMar($oevk, $user) & (!isOevkSzavazas($oevk))) {
+			  $this->setMessage('Ön már szavazott!','error');
 			  $this->setRedirect(JURI::root().'component/content/category?id='.$oevk);
 			  $this->redirect();
 		   } else {
@@ -445,14 +445,7 @@
 			$this->setRedirect(JURI::base().'index.php?option=com_adalogin&redi='.$url);
 			$this->redirect();
 		}
-	    $model = new szavazokModel();
-	    if ($model->szavazatDelete($oevk, $user, $evConfig->fordulo, 0)) {
-			$this->szavazok($oevk, $user, $filter);	
-		} else {
-			$this->setMessage('Hiba történt a korábbi szavazat törlése közben','error');
-			$this->setRedirect(JURI::root());
-			$this->redirect();
-		}
+		$this->szavazok($oevk, $user, $filter);	
 	}
   }
   // ================= main program ===========================

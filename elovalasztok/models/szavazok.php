@@ -3,9 +3,9 @@
   * szavazok model
   *   taskok: szavazok, szavazatEdit, szavazatDelete, eredmeny, szavazatSave
   * Licensz: GNU/GPL
-  * Szerzõ: Fogler Tibor   tibor.fogler@gmail.com_addref
+  * SzerzÃµ: Fogler Tibor   tibor.fogler@gmail.com_addref
   * web: github.com/utopszkij/elovalasztok2018
-  * Verzió: V1.00  2016.09.14.
+  * VerziÃ³: V1.00  2016.09.14.
   *
   * JRequest: oevk, task
   */
@@ -19,18 +19,18 @@ class szavazokModel {
 		$db = JFactory::getDBO();
 		$db->setQuery('CREATE TABLE IF NOT EXISTS #__szavazatok (
 		  `id` int(11) NOT NULL AUTO_INCREMENT,
-		  `temakor_id` int(11) NOT NULL COMMENT "témakör azonosító",
-		  `szavazas_id` int(11) NOT NULL COMMENT "szavazás azonosító",
-		  `szavazo_id` int(11) NOT NULL COMMENT "szavaó azonosító a concorde-shulze kiértékeléshez",
-		  `user_id` int(11) NOT NULL COMMENT "Ha nyilt szavazás a szavazó user_id -je",
-		  `alternativa_id` int(11) NOT NULL COMMENT "alternativa azonositó",
-		  `pozicio` int(11) NOT NULL COMMENT "ebbe a pozicióba sorolta az adott alternativát",
-		  `fordulo` tinyint NOT NULL DEFAULT 0 COMMENT "szavazási forduló",
-		  `ada0` tinyint NOT NULL DEFAULT 0 COMMENT "ADA regisztrált",
+		  `temakor_id` int(11) NOT NULL COMMENT "tÃ©makÃ¶r azonosÃ­tÃ³",
+		  `szavazas_id` int(11) NOT NULL COMMENT "szavazÃ¡s azonosÃ­tÃ³",
+		  `szavazo_id` int(11) NOT NULL COMMENT "szavaÃ³ azonosÃ­tÃ³ a concorde-shulze kiÃ©rtÃ©kelÃ©shez",
+		  `user_id` int(11) NOT NULL COMMENT "Ha nyilt szavazÃ¡s a szavazÃ³ user_id -je",
+		  `alternativa_id` int(11) NOT NULL COMMENT "alternativa azonositÃ³",
+		  `pozicio` int(11) NOT NULL COMMENT "ebbe a poziciÃ³ba sorolta az adott alternativÃ¡t",
+		  `fordulo` tinyint NOT NULL DEFAULT 0 COMMENT "szavazÃ¡si fordulÃ³",
+		  `ada0` tinyint NOT NULL DEFAULT 0 COMMENT "ADA regisztrÃ¡lt",
 		  `ada1` tinyint NOT NULL DEFAULT 0 COMMENT "ADA szem.adatokat megadta",
-		  `ada2` tinyint NOT NULL DEFAULT 0 COMMENT "ADA email ellenörzött",
+		  `ada2` tinyint NOT NULL DEFAULT 0 COMMENT "ADA email ellenÃ¶rzÃ¶tt",
 		  `ada3` tinyint NOT NULL DEFAULT 0 COMMENT "ADA hiteles",
-		  `secret` varchar(1024) NOT NULL DEFAULT "" COMMENT "biztonsági kulcs",
+		  `secret` varchar(1024) NOT NULL DEFAULT "" COMMENT "biztonsÃ¡gi kulcs",
 		  PRIMARY KEY (`id`),
 		  KEY `temakori` (`temakor_id`),
 		  KEY `szavazasi` (`szavazas_id`),
@@ -44,17 +44,17 @@ class szavazokModel {
 		}	
 		
 		$db->setQuery('CREATE TABLE IF NOT EXISTS #__eredmeny (
-			  `organization` int(11) NOT NULL DEFAULT 0 COMMENT "témakör ID",
-			  `pollid` int(11) NOT NULL DEFAULT 0 COMMENT "szavazás ID",
-			  `vote_count` int(11) NOT NULL DEFAULT 0 COMMENT "szavazatok száma",
-			  `report` text COMMENT "cachelt report htm kód",
+			  `organization` int(11) NOT NULL DEFAULT 0 COMMENT "tÃ©makÃ¶r ID",
+			  `pollid` int(11) NOT NULL DEFAULT 0 COMMENT "szavazÃ¡s ID",
+			  `vote_count` int(11) NOT NULL DEFAULT 0 COMMENT "szavazatok szÃ¡ma",
+			  `report` text COMMENT "cachelt report htm kÃ³d",
 			  `filter` varchar(128) NOT NULL DEFAULT "" COMMENT "szavazatok rekordra vonatkozo sql filter alias:a",
-			  `fordulo` tinyint NOT NULL DEFAULT 0 COMMENT "szavazási forduló",
-			  `c1` int(11) NOT NULL DEFAULT 0 COMMENT "condorce elsõ helyezet alertativa ID",
-			  `c2` int(11) NOT NULL DEFAULT 0 COMMENT "condorce második helyezet alertativa ID",
+			  `fordulo` tinyint NOT NULL DEFAULT 0 COMMENT "szavazÃ¡si fordulÃ³",
+			  `c1` int(11) NOT NULL DEFAULT 0 COMMENT "condorce elsÃµ helyezet alertativa ID",
+			  `c2` int(11) NOT NULL DEFAULT 0 COMMENT "condorce mÃ¡sodik helyezet alertativa ID",
 			  `c3` int(11) NOT NULL DEFAULT 0 COMMENT "condorce harmadik helyezet alertativa ID",
 			  `c4` int(11) NOT NULL DEFAULT 0 COMMENT "condorce negyedik helyezet alertativa ID",
-			  `c5` int(11) NOT NULL DEFAULT 0 COMMENT "condorce ötödik helyezet alertativa ID",
+			  `c5` int(11) NOT NULL DEFAULT 0 COMMENT "condorce Ã¶tÃ¶dik helyezet alertativa ID",
 			  `c6` int(11) NOT NULL DEFAULT 0 COMMENT "condorce hatodik helyezet alertativa ID",
 			  `c7` int(11) NOT NULL DEFAULT 0 COMMENT "condorce hetedik helyezet alertativa ID",
 			  `c8` int(11) NOT NULL DEFAULT 0 COMMENT "condorce nyolcadik helyezet alertativa ID",
@@ -70,9 +70,9 @@ class szavazokModel {
 	}
 	
 	/**
-	  * egy adott oevk jelöltjeinek beolvasása
+	  * egy adott oevk jelÃ¶ltjeinek beolvasÃ¡sa
 	  * @param integer oevk_id
-	  * @return {"oevkId":szám, "oevkNev":string, "alternativak":[{"id":szám,"nev":string},....]}
+	  * @return {"oevkId":szÃ¡m, "oevkNev":string, "alternativak":[{"id":szÃ¡m,"nev":string},....]}
 	*/  
 	public function getItem($szavazas_id) {
 		$db = JFactory::getDBO();
@@ -109,8 +109,8 @@ class szavazokModel {
 	}
 	
 	/**
-	  * get OEVK ID jelölt ID alapján
-	  * @param integer jelölt ID
+	  * get OEVK ID jelÃ¶lt ID alapjÃ¡n
+	  * @param integer jelÃ¶lt ID
 	  * @return integer oevk ID
 	  */
 	public function getOevkFromJelolt($jeloltId,$config) {
@@ -134,7 +134,7 @@ class szavazokModel {
 	}
 	
 	/**
-	  * szavazat tárolása adatbázisba
+	  * szavazat tÃ¡rolÃ¡sa adatbÃ¡zisba - oevk szavazÃ¡snÃ¡l elÅ‘tÃ¶rlÃ©ssel
 	  * @param integer oevk id
 	  * @param string jelolt_id=pozicio,....
 	  * @param JUser
@@ -147,63 +147,77 @@ class szavazokModel {
 		if ($szavazas_id == $evConfig->probaSzavazas) return true;
 		$result = true;
 		$msg = '';
+
+		// jososultsÃ¡g ellenÃ¶rzÃ©s
 		if (teheti($szavazas_id, $user, 'szavazas', $msg) == false) {
 			  $this->errorMsg .= $msg;
-			  $result = false;
+			  return false;	
 		}
+
 		$db = JFactory::getDBO();
 		$db->setQuery('START TRANSACTION');
 		$db->query();
+
+		// oevk szavazÃ¡soknÃ¡l tÃ¶rÃ¶ljÃ¼k a user esetleges mÃ¡r meglÃ©vÅ‘ szavazatait
+		if (teheti($szavazas_id, $user, 'szavazas', $msg)) {
+			if (isOevkSzavazas($szavazas_id)) {
+ 				$result = $this->szavazatDelete($szavazas_id, $user, $evConfig->fordulo, 0);
+			}		
+		}
 		
-		// ada hitelesitési szint
+		// ada hitelesitÃ©si szint
 		$ada0 = 0;
 		$ada1 = 0;
 		$ada2 = 0;
 		$ada3 = 0;
 		if (substr($user->params,0,1)=='[') $ada0 = 1;   // ADA
-		if (strpos($user->params,'hash') > 0) $ada1 = 1; // ADA személyes adatok alapján
-		if (strpos($user->params,'email') > 0) $ada2 = 1; // ADA email aktiválás
-		if (strpos($user->params,'magyar') > 0) $ada3 = 1; // ADA személyesen ellenörzött
-		// szavazás kategoria megállapitása
+		if (strpos($user->params,'hash') > 0) $ada1 = 1; // ADA szemÃ©lyes adatok alapjÃ¡n
+		if (strpos($user->params,'email') > 0) $ada2 = 1; // ADA email aktivÃ¡lÃ¡s
+		if (strpos($user->params,'magyar') > 0) $ada3 = 1; // ADA szemÃ©lyesen ellenÃ¶rzÃ¶tt
+
+		// szavazÃ¡s kategoria megÃ¡llapitÃ¡sa
 		$db->setQuery('select * from #__categories where id='.$db->quote($szavazas_id));
 		$res = $db->loadObject();
 		if ($res)
 			$catid = $res->parent_id;
 		else
 			$catid = 0;
-		// string részekre bontása és tárolás ciklusban
-		$w1 = explode(',',$szavazat);
-		foreach ($w1 as $item) {
-			$w2 = explode('=',$item);
-			$db->setQuery('INSERT INTO #__szavazatok 
-				(`temakor_id`, 
-				`szavazas_id`, 
-				`szavazo_id`, 
-				`user_id`, 
-				`alternativa_id`, 
-				`pozicio`,
-				`ada0`, `ada1`, `ada2`, `ada3`,
-				`fordulo`,`secret`
-				)
-				VALUES
-				('.$db->quote($catid).', 
-				'.$db->quote($szavazas_id).', 
-				'.$db->quote($user->id).', 
-				'.$db->quote($user->id).', 
-				'.$db->quote($w2[0]).', 
-				'.$db->quote($w2[1]).',
-				'.$ada0.','.$ada1.','.$ada2.','.$ada3.',
-				'.$db->quote($fordulo).','.$secret.'
-				)
-			');
-			try {
-			  if ($db->query() != true) {
-			    $this->errorMsg .= $db->getErrorMsg().'<br />';
-			    $result = false;
-			  }
-			} catch (Exception $e) {
-				$result = false;
-			}	
+
+		if ($result) {
+			// string rÃ©szekre bontÃ¡sa Ã©s tÃ¡rolÃ¡s ciklusban
+			$w1 = explode(',',$szavazat);
+			foreach ($w1 as $item) {
+				$w2 = explode('=',$item);
+				$db->setQuery('INSERT INTO #__szavazatok 
+					(`temakor_id`, 
+					`szavazas_id`, 
+					`szavazo_id`, 
+					`user_id`, 
+					`alternativa_id`, 
+					`pozicio`,
+					`ada0`, `ada1`, `ada2`, `ada3`,
+					`fordulo`,`secret`
+					)
+					VALUES
+					('.$db->quote($catid).', 
+					'.$db->quote($szavazas_id).', 
+					'.$db->quote($user->id).', 
+					'.$db->quote($user->id).', 
+					'.$db->quote($w2[0]).', 
+					'.$db->quote($w2[1]).',
+					'.$ada0.','.$ada1.','.$ada2.','.$ada3.',
+					'.$db->quote($fordulo).','.$secret.'
+					)
+				');
+				try {
+				  if ($db->query() != true) {
+					$this->errorMsg .= $db->getErrorMsg().'<br />';
+					$result = false;
+				  }
+				} catch (Exception $e) {
+					$result = false;
+				}	
+			}
 		}
 
 		// delete cached report
@@ -226,14 +240,31 @@ class szavazokModel {
 	}	
 	
 	/**
-	* biztonságos törlés: s
-	* 1. update szavazat_id =0 - ezt az egy modositást engedi meg a trigger 
-	* 2. fizikai törlés - a trigger csak szavazat_id=0 -t enged törölni
+	* biztonsÃ¡gos tÃ¶rlÃ©s:  cÃ©lszerÃ¼ transaction -ban hÃ­vni!
+	* 1. update szavazat_id =0 - ezt az egy modositÃ¡st engedi meg a trigger 
+	* 2. fizikai tÃ¶rlÃ©s - a trigger csak szavazat_id=0 -t enged tÃ¶rÃ¶lni
+    * FIGYELEM!!!!! ez csak az oevk Ã©s Ã¶nkormÃ¡nyzati szavazÃ¡sokhoz jÃ³!
+    *   ugyanis tÃ¶rli az azonos tulajdonos kategoriÃ¡hoz tartozÃ³ Ã¶sszes szavazatot,
+    *   ez az oevk -nÃ¡l, jÃ³ is, MÃSHOL AZONBAN NEM!
 	*/
 	public function szavazatDelete($szavazas_id, $user, $fordulo, $secret = 0) {
+		if (!isOevkSzavazas($szavazas_id)) {
+			$this->errorMsg = 'Ez nem OEVK szavazÃ¡s';
+			return false;
+		}
+		$defCatid = 8; // oevk szavazÃ¡sok		
 		$result = true;
 		$db = JFactory::getDBO();
-		$db->setQuery('START TRANSACTION');
+
+		// meghatÃ¡rozom a catid -t a $szavazas_id alapjÃ¡n (oevk szavazÃ¡s, Ã¶nkormÃ¡nyzati szavazÃ¡s,....
+		$db->setQuery('select * from #__categories where id='.$db->quote($szavazas_id));
+		$res = $db->loadObject();
+		if ($res)
+			$catid = $res->parent_id;
+		else
+			$catid = $defCatid;
+
+		/* secret kÃ³d kiolvasÃ¡sa - ezt a triggeres ellenÃ¶rzÃ©st jelenleg nem hasznÃ¡ljuk 2017.11.6
 		if ($secret == 0) {
 			$db->setQuery('select * from #__szavazatok where user_id='.$db->quote($user->id));
 			$res = $db->loadObjectList();
@@ -241,13 +272,18 @@ class szavazokModel {
 				$secret = $res[0]->secret;
 			}
 		}
-		$db->queery();
+		$db->query();
+		*/
+
 		try {
 			$db->setQuery('update #__szavazatok 
-			set szavazas_id=0, user_id = 0, secret='.$secret.'
-			where user_id='.$db->quote($user->id).' and fordulo='.$db->quote($fordulo));
+			set szavazas_id=0, user_id = 0, secret = 0 
+			where user_id='.$db->quote($user->id).' and fordulo='.$db->quote($fordulo).'
+			and temakor_id='.$db->quote($catid));
 			$result = $db->query();
+			$this->errorMsg = $db->getErrorMsg();
 		} catch (Exception $e) {
+			$this->errorMsg = $db->getErrorMsg();
 			$result = false;
 		}
 		
@@ -256,10 +292,11 @@ class szavazokModel {
 			$db->setQuery('delete from #__szavazatok where szavazas_id = 0');
 			try {
 			   $result = $db->query();
+			   $this->errorMsg = $db->getErrorMsg();
 			} catch (Exception $e) {
+				$this->errorMsg = $db->getErrorMsg();
 				$result = false;
 			}
-			$this->errorMsg = $db->getErrorMsg();
 		}
 		// delete cached report
 		$db->setQuery('UPDATE #__eredmeny 
@@ -270,12 +307,6 @@ class szavazokModel {
 		} catch (Exception $e) {
 			;
 		}
-
-		if ($result) 
-			$db->setQuery('COMMIT');
-		else
-			$db->setQuery('ROLLBACK');
-		$db->queery();
 
 		return $result;  
 	}

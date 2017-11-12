@@ -102,6 +102,7 @@ class Condorcet {
 		összehasonlítása</h4>';
         $result .= $this->showlist($this->shortlist);
         $result .= '</div></div>';
+		$result.= '<div class="condorcetInfo3">Azokat a szavazatokat, amelyeket a végleges jelöltlista felállása előtt adtak le, azoknak a jelölteknek a tekintetében vesszük figyelembe, amelyek a szavazatban és a végleges jelöltlistában is szerepelnek. Amennyiben egy jelölő szervezet kicseréli a jelöltjét, a régit töröljük, és új jelöltet inditunk.</div>';
         return $result;
       }
 
@@ -428,6 +429,19 @@ class Condorcet {
                      <tr><th>Helyezés</th><th>Név</th></tr>'."\n";
 		  $helyezes = 0;
           foreach($shortlist as $j => $i) {
+					 // $cimkek (jelölő szervezet logok képzése 
+					 $cimkek = '';
+					 $db->setQuery('select * 
+					 from #__contentitem_tag_map
+					 where content_item_id='.$i.' and type_alias="com_content.article"');
+					 $resCimkek = $db->loadObjectList();
+					 foreach  ($resCimkek as $resCimke) {
+						$cimkek .= '<li class="tag-list0 tag-'.$resCimke->tag_id.'">&nbsp;</li>';
+					 }
+					 if ($cimkek != '') 
+						$cimkek = '<ul class="inline">'.$cimkek.'</ul>';
+
+					 // condorcet gyöztes?
 			         if ($j == 0)
 				           $helyezes = 1;
 			         else if ($values[$i] < $values[$shortlist[$j-1]])
@@ -440,16 +454,18 @@ class Condorcet {
 				        if ($values[$i] === $values[$shotlist[$j-1]])
 					        $info .= 'döntetlen';
 			         }
+
+					 // jelölt sor megjelenítése
 					 $result .= '<tr><td class="pozicio">'.$helyezes.'</td>
 			         <td class="nev">
 							 <a href="'.JURI::root().'component/content/article/'.$i.'">
-							 '.$this->candidates[$i].' '.$info.'
+							 '.$this->candidates[$i].$cimkek.' '.$info.'
 							 </a></td>
 					</tr>
 					';
           }
           $result .= "</table>\n";
-    	  $db->setQuery('select count(DISTINCT a.user_id) cc
+    	  $db->setQuery('select count(DISTINCT a.szavazo_id) cc
     		  from #__szavazatok a
     		  where a.szavazas_id = '.$db->quote($this->poll));
           $res = $db->loadObject();

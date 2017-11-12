@@ -34,15 +34,18 @@ echo '
 <p id="voksHelp">Rangsorolja a jelölteket. A legjobbnak tartott kerüljön felülre! Egérrel huzhatja a sorokat,
 vagy használhatja a lenyiló menüt. Több jelelöltet is azonos pozicióba sorolhat</p>
 ';
-echo '<table id="preftable" width="100%" border="1">
-<thead><tr><th>Név</th><th>Pozició</th></tr></thead>
+echo '
+<table id="preftable" width="100%" border="1">
+<thead><tr><th></th><th>Név</th><th></th><th>Név</th></tr></thead>
 <tbody>';
-// fontos, hogy ul-ben és a li -elemekben ne legyenek #text elemek!
+// fontos, hogy ul-ben és a tr elemekben ne legyenek #text elemek!
 $i = 0;
 foreach ($item->alternativak as $res1) {
   echo '<tr>';
+  echo '<td style="width:30px; text-align:center"><button type="button" class="up">&uarr;</button></td>';	
   echo '<td id="jelolt'.$res1->id.'" style="cursor:pointer"><var>'.$res1->nev.'</var></td>';
-  echo '<td style="width:65px;"><select style="width:60px;" onchange="sort_rows()">';
+  echo '<td style="width:30px; text-align:center"><button type="button" class="down">&darr;</button>';
+  echo '</td><td style="width:65px;"><select style="width:60px;" onchange="sort_rows()">';
   for ($j=1; $j<=count($item->alternativak); $j++) {
 	  if ($j == $i+1) {
 		  echo '<option value="'.$j.'" selected="selected">'.$j.'</option>';
@@ -50,14 +53,17 @@ foreach ($item->alternativak as $res1) {
 		  echo '<option value="'.$j.'">'.$j.'</option>';
 	  }
   }
-  echo '</select></td></tr>';  
+  echo '</select></td></tr>';
   $i++;		
 }
 echo '</tbody>
 </table>
 <input type="hidden" name="szavazat" value"" />
-<center><button type="button" onclick="okClick();" class="btn btn-primary btn-ok">Szavazat beküldése</button>
+<center><button id="okBtn" type="button" class="btn btn-primary btn-ok">Szavazat beküldése</button>
 <button type="button" onclick="location='."'$cancelUrl'".'" class="btn btn-cancel">Mégsem</button></center>
+<div class="szavazashelp">
+A választást megelőző harmincadik napig új jelöltek jelenhetnek meg. Jelöltek visszaléphetnek, a jelöltekről szoló infok változhatnak. Ezért javasljuk, hogy idönként látogasson vissza ide és szükség esetén módosítsa szavazatát!
+</div>
 </form>
 </div>
 ';

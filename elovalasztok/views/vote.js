@@ -4,6 +4,9 @@
 // automatically resorted in ranking order, and buttons are provided
 // for convenient manipulation of the ballot.
 
+/*
+// régi képernyő ------------ 
+
 var rows = new Array;           // the actual DOM nodes for the table rows
 var rank = new Array;           // the ranks of the table rows (1..num_choices)
 var selected = new Array;
@@ -84,7 +87,7 @@ function sort_rows() {
 		if (m[1] > n[1]) return +1;
         return 0;
     }
-    permut.sort(compare); // a jelenlegi rows[i] -nek a permut[i] pozici�ra kell ker�lnie
+    permut.sort(compare); // a jelenlegi rows[i] -nek a permut[i] pozicióra kell kerülnie
     for (var i = 0; i < permut.length; i++) {
 		rows[i].getElementsByTagName("var")[0].innerHTML = permut[i][0];
 		rows[i].getElementsByTagName("select")[0].selectedIndex = permut[i][1];
@@ -128,16 +131,6 @@ function select_row(row, add) {
 	    selected[i] = !selected[i];
 	}
 	set_row_style(i);
-    }
-}
-
-// Recompute the arrays "rows" and "rank" from the rows of the table.
-function read_rows() {
-    //alert("reading the rows, length = " + (preftable.rows.length - 1));
-    for (var i = 0; i < num_choices; i++) {
-        var row = rows[i] = preftable.rows[i+1];
-        var s = row.getElementsByTagName("select")[0];
-        rank[i] = s.selectedIndex + 1;
     }
 }
 
@@ -383,7 +376,36 @@ function do_move_bottom() {
     set_row_borders();
 }
 
-// Correct the ranks of the rows after a row is dragged.
+
+// initialize the UI
+
+if (window.navigator.appName != "Microsoft Internet Explorer") {
+    Element.prototype.app = function(c) {
+	this.appendChild(c);
+	return this;
+    }
+}
+
+function el(t) {
+    return document.createElement(t);
+}
+function tx(t) {
+    return document.createTextNode(t);
+}
+// Recompute the arrays "rows" and "rank" from the rows of the table.
+function read_rows() {
+    //alert("reading the rows, length = " + (preftable.rows.length - 1));
+    for (var i = 0; i < num_choices; i++) {
+        var row = rows[i] = preftable.rows[i+1];
+        var s = row.getElementsByTagName("select")[0];
+        rank[i] = s.selectedIndex + 1;
+    }
+}
+**
+* egeres huzás utáni selectedIndex rendezés
+* @param event
+* @param jQuery_object tr vagy li
+*
 function drag_update(e, u) {
     var this_select = u.item.find('select')[0];
     var rownum = 0;
@@ -429,41 +451,25 @@ function drag_update(e, u) {
     set_row_borders();
 }
 
-// initialize the UI
+*/
 
-if (window.navigator.appName != "Microsoft Internet Explorer") {
-    Element.prototype.app = function(c) {
-	this.appendChild(c);
-	return this;
-    }
+// ÚJ képernyő ----------------------------------------
+
+/**
+* selectedIndex -ek rendezése
+* drag utáni update up/down gombok és egeres drag használják
+*/
+function drag_update2(e,u) {
+	if (e == undefined) e = null;
+	if (u == undefined) u = null;
+	var i = 0;
+	var row = false;
+	var rows = jQuery('#preftable tr');		
+	for (i=1; i<rows.length; i++) {
+	  row = rows[i];
+	  row.cells[3].firstChild.selectedIndex = i - 1;
+	}
 }
-
-function el(t) {
-    return document.createElement(t);
-}
-function tx(t) {
-    return document.createTextNode(t);
-}
-
-function okClick() {
-		var s = '';
-		var i = 0;
-		var row = false;
-		read_rows();
-		while (i < preftable.rows.length - 1) {
-		  if (s != '') {
-				s += ',';
-		  }
-		  row = rows[i];
-		  s += row.getElementsByTagName("td")[0].id.substr(6,10)+'='+(row.getElementsByTagName("select")[0].selectedIndex + 1);
-		  i++;
-		}
-		document.forms.szavazatForm.szavazat.value = s;
-		document.forms.szavazatForm.submit();
-		return;
-}
-
-
 
 jQuery(function() {
     preftable = document.getElementById("preftable");
@@ -473,10 +479,48 @@ jQuery(function() {
     cur_top = 1;
     cur_bot = num_choices;
 
-    sort_rows();
+    //sort_rows();
+	current = false;
 
+	/**
+	* preftable tbody sortable bekapcsolása és drag_update2 hozzá rendelése
+	*/
     jQuery('#preftable tbody').sortable({'items':'tr:not(.heading)',
 			'axis':'y', 
-			'update':drag_update});
+			'update':drag_update2});
+	/**
+	* fel/le gombok müködésének definiálása
+	*/
+	jQuery(".up,.down").click(function(){
+		    var row = jQuery(this).parents("tr:first");
+		    if (jQuery(this).is(".up")) {
+		        row.insertBefore(row.prev());
+				drag_update2();
+		    } else {
+		        row.insertAfter(row.next());
+				drag_update2();
+		    }
+		});
+	/**
+	* OK gomb funkció
+	*/
+	jQuery("#okBtn").click(function() {
+		var s = '';
+		var i = 0;
+		var row = false;
+		var rows = jQuery('#preftable tr');		
+		for (i=1; i<rows.length; i++) {
+		  if (s != '') {
+				s += ',';
+		  }
+		  row = rows[i];
+		  s += row.cells[1].id.substr(6,10)+'='+(1 + row.cells[3].firstChild.selectedIndex);
+		}
+
+		document.forms.szavazatForm.szavazat.value = s;
+		document.forms.szavazatForm.submit();
+		return;
+	});
 });
-//vim: sw=4 ts=8
+
+

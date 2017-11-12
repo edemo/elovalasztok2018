@@ -19,6 +19,21 @@
   include_once dirname(__FILE__).'/config.php';
 
 
+
+	function isMobileDev(){
+		if(isset($_SERVER['HTTP_USER_AGENT']) and !empty($_SERVER['HTTP_USER_AGENT'])){
+		   $user_ag = $_SERVER['HTTP_USER_AGENT'];
+		   if(preg_match('/(Mobile|Android|Tablet|GoBrowser|[0-9]x[0-9]*|uZardWeb\/|Mini|Doris\/|Skyfire\/|iPhone|Fennec\/|Maemo|Iris\/|CLDC\-|Mobi\/)/uis',$user_ag)){
+		      return true;
+		   }else{
+		      return false;
+		   };
+		}else{
+		   return false;    
+		};
+	};
+
+
   $user = JFactory::getUser();
   $msg = '';
   $input = JFactory::getApplication()->input;  
@@ -29,7 +44,13 @@
   $view = $input->get('view');
   $fileid = $input->get('fileid');
   $id = $input->get('id');
-  
+  $redi = 'https://elovalasztok.edemokraciagep.org'.$_SERVER['REQUEST_URI'];
+  $loginURL = JURI::root().'index.php?option=com_adalogin&redi='.base64_encode($redi);
+  if (isMobileDev()) {
+  	$loginScript = "location='$loginURL'";
+  } else {	 
+  	$loginScript = "open('$loginURL','ADA','width=370,height=600,left=100,top=100');";
+  }
   if ($option == 'com_content') {
 	  if ($view == 'article') {
 		  $szavazas_id = oevkFromJelolt($id);
@@ -42,10 +63,6 @@ $userToken = JSession::getFormToken();
 $logoutLink = JURI::root(). 'index.php?option=com_adalogin&task=dologout';
 
 if ($user->id > 0) {
-    //echo '<div class="userInfo">
-	//<p><img src="'.JURI::root().'media/system/images/notice-info.png" />
-	//<var>Bejelentkezve</var></p>
-	//';
 	$marSzavazott = holSzavazott($szavazas_id, $user); 
 	if ($marSzavazott != '') {
 		echo '<div id="szavazott_info">
@@ -64,15 +81,15 @@ if ($user->id > 0) {
   <div class="gombok1">
   <div class="gombok2">
   <?php if ($user->id <= 0) : ?>
-  <?php $redi = 'https://elovalasztok.edemokraciagep.org'.$_SERVER['REQUEST_URI']; ?>	
-  <button id="loginBtn" type="button" title="Bejelentkezés" 
-     onclick="open('<?php echo JURI::root(); ?>index.php?option=com_adalogin&redi=<?php echo base64_encode($redi); ?>','ADA','width=370,height=600,left=100,top=100');">
-     <i class="icon-login"> </i> <label>Bejelentkezés</label>
-  </button>
+    <button id="loginBtn" type="button" title="Bejelentkezés" 
+      onclick="<?php echo $loginScript; ?>">
+      <i class="icon-login"> </i> <label>Bejelentkezés</label>
+    </button>
   <br />
   <?php endif; ?>
     
   <?php if ($user->id > 0) : ?>
+	<var class="username"><?php echo $user->username; ?></var>
     <button id="logoutBtn" onclick="location='<?php echo $logoutLink; ?>';" title="Kijelentkezés">
        <i class="icon-logout"> </i><label>Kijelentkezés</label>
     </button><br />

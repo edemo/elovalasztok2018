@@ -332,7 +332,7 @@
 						   'Amennyiben böngészője tárolja a "cooki"-kat (sütiket); akkor 30 napon belül, ebből a böngészöből kezdeményezheti szavazata törlését<br />'.
                            'Ellenkező esetben, 30 nap után, illetve másik böngészőből a szavazat törléséhez a fenti biztonsági kód megadása szükséges.<br />';
 					// 2017.02.09 egyenlőre nem lesz szavazat törlési lehetőség
-					$msg = 'Köszönjük szavazatát.';	
+					$msg = 'Köszönjük szavazatát. A választást megelőző harmincadik napig új jelöltek jelenhetnek meg. Jelöltek visszaléphetnek, a jelöltekről szoló infok változhatnak. Ezért javasljuk, hogy idönként látogasson vissza ide és szükség esetén módosítsa szavazatát!';	
 				    $msgClass = 'info';
 					$cookie_name = 'voks_'.$oevk;
 					$cookie_value = $secret;
@@ -446,6 +446,43 @@
 			$this->redirect();
 		}
 		$this->szavazok($oevk, $user, $filter);	
+	}
+
+	/**
+	* leadott szavazatok listája
+	* @param integer szavazas_id
+	* @param JUser
+	* @param string
+	*/
+	public function szavazatok($oevk, $user=null, $filter='') {
+		$db = JFactory::getDBO();
+		$db->setQuery('select sz.szavazas_id, sz.szavazo_id, sz.pozicio, c2.title altTitle,
+		c1.title szTitle
+		from #__szavazatok sz
+		left outer join #__content c2 on c2.id = sz.alternativa_id
+		left outer join #__categories c1 on c1.id = sz.szavazas_id
+		where c2.state = 1 and 
+		sz.szavazas_id = '.$oevk.'
+		order by 1,2,3
+		');
+		$res = $db->loadObjectList();
+		if (count($res) > 0) {
+			echo '<div class="szavazatok">
+			<h2>'.$res[0]->szTitle.'</h2>
+			<h3>Leadott szavazatok</h3>
+			<ul>';
+			$elozo = 0;
+			foreach ($res as $res1) {
+				if ($elozo != $res1->szavazo_id) echo '<li style="list-style:none" class="sparator">
+					--------------user'.$res1->szavazo_id.'------------
+				</li>';
+				echo '<li class="szavazat">'.$res1->altTitle.'</li>';
+				$elozo = $res1->szavazo_id;
+			}
+			echo '</ul>
+			</div>
+			';
+		}
 	}
   }
   // ================= main program ===========================
